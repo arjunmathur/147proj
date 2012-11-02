@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SocialGPS</title>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+	</head>	
+	
+	<body>
+		<div data-role="page" data-theme="a" id="homepage" class="page-map" style="width:100%; height:100%;">
+			<div data-role="header"><h1>Social GPS</h1></div>
+			<div id="navbar" data-theme="a" data-role="navbar" data-iconpos="top">
+				<ul>
+					<li>
+						<a href="index.html" data-theme="a" data-icon="search" class="ui-btn-active ui-state-persist">Choose Destination</a>
+					</li>
+					<li>
+						<a href="settings.html" data-theme="a" data-icon="gear">Settings</a>
+					</li>
+				</ul>
+			</div>
+			<div data-role="content" style="width:100%; height:100%; padding:0;"> 
+			
+				<section id="wrapper" style="width:100%; height:100%;">
+					<label for="searchbar"></label>
+					<input type="search" name="searchbar" id="searchbar" placeholder=" Address or Destination" value=""  />
+					<div id="map" style="width:320px; height:400px;"></div>
+					<script type = "text/javascript" src="http://www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluuanu0znh%2C2n%3Do5-96bs0w"></script> 
+					<article> 
+					  <p><span id="status">Locating...</span></p>
+					</article>
+					
+					<script type="text/javascript">
+						var map; var mapcanvas; var latlng;
+						
+						/* On page load, get geolocation and create map */
+						$(document).bind('pageinit',function(event){
+						  if (navigator.geolocation) {
+							navigator.geolocation.getCurrentPosition(success, error);
+							} else {
+							error('not supported');
+						}
+						});
+						
+						
+						
+						function success(position) {
+						  						  
+						 	$('#status').html("");
+						 	
+			  
+						  	var options={
+      							elt:document.getElementById('map'), /*ID of element on the page where you want the map added*/ 
+      						  	zoom:10,                                  /*initial zoom level of the map*/ 
+    					    	latLng:{lat:37.428412, lng:-122.169597},  /*center on loc */ 
+  						     	mtype:'map',                              /*map type (map)*/ 
+					       	    bestFitMargin:0,          /*margin offset from the map viewport when applying a bestfit on shapes*/ 
+       							zoomOnDoubleClick:true                    /*zoom in when double-clicking on map*/ 
+    						};
+
+     						 /*Construct an instance of MQA.TileMap with the options object*/ 
+						  	window.map = new MQA.TileMap(options);
+						  	
+						  	/*Using the MQA.Poi constructor*/ 
+  						var info=new MQA.Poi({lat:37.428412,lng:-122.169597});
+ 
+  						info.setInfoContentHTML('Stanford University');
+
+  						/*This will add the POI to the map in the map's default shape collection.*/ 
+  						map.addShape(info);
+						  	
+						  
+						 MQA.withModule('largezoom','traffictoggle','viewoptions','geolocationcontrol','insetmapcontrol','mousewheel', function() {
+	
+   						 map.addControl(
+    					  new MQA.LargeZoom(),
+			    		  new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5,5))
+  						  );
+		
+   						 map.addControl(
+   						 new MQA.TrafficToggle()
+   						 );
+
+ 					     map.addControl(
+ 					     new MQA.ViewOptions()
+ 					     );
+
+ 					     map.addControl(
+   					     new MQA.GeolocationControl(),
+   					     new MQA.MapCornerPlacement(MQA.MapCorner.TOP_RIGHT, new MQA.Size(10,50))
+  					    );
+  					    
+
+
+   						 /*Inset Map Control options*/ 
+   						 var options={
+  						    size:{width:150, height:125},
+     					    zoom:3,
+    				        mapType:'map',
+     					    minimized:true };
+
+  					    map.enableMouseWheelZoom();
+  					    
+  					    navigator.geolocation.getCurrentPosition(function(position) {
+    				 	  map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+   					  	});
+  					    
+  						});
+  						
+  						
+						 						  
+						  
+						}
+						
+					
+						function error(msg) {
+						  var s = document.querySelector('#status');
+						  s.innerHTML = typeof msg == 'string' ? msg : "failed";
+						  s.className = 'fail';
+						}
+						
+						
+									
+					</script>
+				</section>	
+			</div>
+		</div>
+	</body>
+</html>

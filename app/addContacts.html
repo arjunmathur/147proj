@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add Contacts</title>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+		<link rel="stylesheet" href="themes/GrouPSTheme.css" />
+		<link rel="stylesheet" href="style.css" />
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    </head>
+    <body>
+        <!-- Home -->
+        <div data-role="page" id="addContacts" data-theme="a">
+            <div data-theme="a" data-role="header">
+                <a href="index.html" data-icon="home">back</a>
+				<h1>GrouPS</h1>
+				<a href="wait_replies.html" data-icon="arrow-r">Invite</a>
+            </div>
+            <div data-role="content">
+				<div data-role="collapsible">
+					<h3> Add Friends for Navigation </h3>
+					<ul data-role="listview" data-inset="false" data-filter="true" data-autodividers="true" class="contacts">
+						<li onclick ="add(this)"><a>Arjun Mathur</a></li>
+						<li onclick ="add(this)"><a>Andy Elder</a></li>
+						<li onclick ="add(this)"><a>Avery Johnson</a></li>
+						<li onclick ="add(this)"><a>Bob Cabot</a></li>
+						<li onclick ="add(this)"><a>Caleb Booth</a></li>
+						<li onclick ="add(this)"><a>Christopher Adams</a></li>
+					</ul>
+				</div>
+				<h3> Added: </h3>
+				<ul data-role="listview" data-inset="true" class="addedList">
+					
+				</ul>
+            </div>
+        </div>
+        <script>
+        	function sortContacts() {
+			  var lis = $('.contacts').children(); 
+			  var vals = [];
+				
+			  // Populate the array
+			  for(var i = 0, l = lis.length; i < l; i++)
+				vals.push(lis[i].innerHTML);
+
+			  // Sort it
+			  vals.sort();
+
+			 
+			  // Change the list on the page
+			  for(var i = 0; i < lis.length; i++)
+				lis[i].innerHTML = vals[i]; 
+			}
+						
+			function add(toAdd){
+				var x = $(toAdd).clone();
+				$(toAdd).remove(); // Hide it
+				$(x).attr("onclick", "remove(this)");
+				$('.addedList').append(x); // Add it to the second list
+				 $('.contacts').listview('refresh');
+				 $('.addedList').listview('refresh');
+			}
+			
+			function remove(toRemove){
+				
+				var x = $(toRemove).clone();
+				$(toRemove).hide(); // Hide it
+				$(x).attr("onclick", "add(this)");
+				$('.contacts').append(x); // Add it to the first list
+				sortContacts();
+				 $('.addedList').listview('refresh');
+				 $('.contacts').listview('refresh');
+			}
+        </script>
+    </body>
+</html>

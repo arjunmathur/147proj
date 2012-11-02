@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Settings</title>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+		<link rel="stylesheet" href="themes/GrouPSTheme.css" />
+		<link rel="stylesheet" href="style.css" />
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    </head>
+    <body>
+        <!-- Home -->
+        <div data-role="page" id="settings">
+            <div data-theme="a" data-role="header">
+                <h1>social GPS</h1>
+				<a href="index.html" data-icon="home">back</a>
+            </div>
+            <div data-role="content">
+                <div data-role="fieldcontain">
+                    <fieldset data-role="controlgroup">
+                        <label for="slider2">
+                            Alert to Start Navigation (Minutes Before)
+                        </label>
+                        <input type="range" name="slider" value="5" min="0" max="15" data-highlight="false" data-theme="d" />
+                    </fieldset>
+                </div>
+                
+                <div id="checkboxes_avoid" data-role="fieldcontain">
+                    <fieldset data-role="controlgroup" data-type="vertical">
+                        <legend>When navigating, avoid:</legend>
+                        <input id="checkbox3" name="Tolls" type="checkbox" />
+                        <label for="checkbox3">Tolls</label>
+						
+                        <input id="checkbox4" name="" type="checkbox" />
+                        <label for="checkbox4">Highways</label>
+						
+                        <input id="checkbox8" name="" type="checkbox" />
+                        <label for="checkbox8">Traffic</label>
+                    </fieldset>
+                </div>
+                <div id="checkboxes_suggest" data-role="fieldcontain">
+                    <fieldset data-role="controlgroup" data-type="vertical">
+                        <legend>When making a stop, suggest:</legend>
+						
+                        <input id="checkbox5" name="Gas Stations" type="checkbox" />
+                        <label for="checkbox5">Gas Stations</label>
+						
+                        <input id="checkbox6" name="Food" type="checkbox" />
+                        <label for="checkbox6">Food</label>
+						
+                        <input id="checkbox7" name="Misc." type="checkbox" />
+                        <label for="checkbox7">Misc.</label>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <script>
+            //App custom javascript
+        </script>
+    </body>
+</html>

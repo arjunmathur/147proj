@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SocialGPS</title>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+		<link rel="apple-touch-startup-image" href="startup.png">
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+	</head>	
+	
+	<body>
+		<div data-role="page" data-theme="a" id="home" style="width:100%; height:100%;">
+			<div data-role="header">
+				<a href="settings.html" data-icon="gear" >Settings</a>
+				<h1>GrouPS</h1>
+				<a href="addContacts.html" data-icon="arrow-r" class="ui-btn-right">Add Friends</a>
+			</div>
+			
+			<div data-role="content" style="width:100%; height:100%; padding:0;"> 
+
+				<section id="wrapper" style="width:100%; height:100%;">
+					<label for="searchbar"></label>
+					<input type="search" name="searchbar" id="searchbar" placeholder=" Address or Destination" value=""  />
+					<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+					<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+					<article>
+					  <p><span id="status">Locating...</span></p>
+					</article>
+					
+					<script type="text/javascript">
+						var service; var map; var searchBox; var latlng; var markersArray = [];
+						
+						/* On page load, get geolocation and create map */
+						$(document).bind('pageinit',function(event){
+						  if (navigator.geolocation) {
+							navigator.geolocation.getCurrentPosition(success, error);
+							} else {
+							error('not supported');
+						}
+						});
+						
+						/* On search enter, search for places and put markers */
+						$("#searchbar").live("change", function(event, ui) {
+							search();
+							});
+							
+							
+						function search() {
+							for (var i = 0; i < markersArray.length; i++ ) {
+								markersArray[i].setMap(null);
+							  }
+							  markersArray = [];
+							var request = {
+								location: latlng,
+								radius: '1000',
+								query: document.getElementById("searchbar").value
+							};
+							service.textSearch(request, callback);
+						 }
+						 
+						 function callback(results, status) {
+							var bounds = new google.maps.LatLngBounds();
+						  if (status == google.maps.places.PlacesServiceStatus.OK) {
+							for (var i = 0; i < results.length; i++) {
+							  var place = results[i];
+							  var marker = new google.maps.Marker({
+								position: results[i].geometry.location,
+								map: map,
+								title: results[i].name});
+								markersArray.push(marker);
+								bounds.extend(place.geometry.location);
+							}
+							 map.fitBounds(bounds);
+						  }
+						}
+						
+						
+						function success(position) {
+						  
+						  $('#status').html("");
+						  
+						  var mapcanvas = document.createElement('div');
+						  mapcanvas.id = 'mapcanvas';
+						  mapcanvas.style.height = '300px'; //TODO: how to make 100%
+						  mapcanvas.style.width = '320px';
+							
+						  $('article').append(mapcanvas);
+						  
+						  latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+						  var myOptions = {
+							zoom: 10,
+							center: latlng,
+							mapTypeControl: false,
+							navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+							mapTypeId: google.maps.MapTypeId.ROADMAP
+						  };
+						  map = new google.maps.Map(document.getElementById("mapcanvas"), myOptions);
+						  service = new google.maps.places.PlacesService(map);
+						
+						  
+						  var markerImage = "http://maps.google.com/intl/en_us/mapfiles/ms/micons/purple-dot.png";
+						  var marker = new google.maps.Marker({
+							  position: latlng, 
+							  map: map, 
+							  title:"You are here!",
+							  icon: markerImage
+						  });
+						  
+						  
+						}
+						
+					
+						function error(msg) {
+						  var s = document.querySelector('#status');
+						  s.innerHTML = typeof msg == 'string' ? msg : "failed";
+						  s.className = 'fail';
+						}
+						
+						
+					</script>
+				</section>	
+			</div>
+		</div>
+	</body>
+</html>
