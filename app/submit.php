@@ -18,7 +18,7 @@
 <div data-role="page">
 
 	<div data-role="header">
-		<h1>My Title</h1>
+		<h1>Submit</h1>
 		<a href="#" data-icon="check" id="logout" class="ui-btn-right">Logout</a>
 
 	</div><!-- /header -->
@@ -30,17 +30,19 @@
 		$query = "SELECT * FROM users WHERE username = '".$_POST["username"]."'";
 		$result = mysql_query($query);
 		$row = mysql_fetch_array($result);
-		if (($_POST["username"] == "test" && $_POST["password"] == "test") || $row['password'] == $_POST["password"]) {
+		if ($row['password'] == $_POST["password"]) {
 			?>
 			<script type="text/javascript">
 				// Save the username in local storage. That way you
 				// can access it later even if the user closes the app.
 				localStorage.setItem('username', '<?=$_POST["username"]?>');
+				$.mobile.changePage("index.html", { transition: "flip", reloadPage: true} );
 			</script>
 			<?php
-			echo "<p>Thank you, <strong>".$_POST["username"]."</strong>. You are now logged in.</p>";
+			echo "<p>Welcome <strong>".$_POST["username"]."</strong>. You are now logged in.</p>";
+			
 		} else {
-			echo "<p>There seems to have been an error.</p>";
+			 echo "<p>There seems to have been an error.</p>";
 		}
 		
 		?>
