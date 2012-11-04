@@ -15,7 +15,7 @@
             <div data-theme="a" data-role="header">
                 <a href="index.html" data-icon="home">back</a>
 				<h1>GrouPS</h1>
-				<a href="wait_replies.html" data-icon="arrow-r">Invite</a>
+				<a href="wait_replies.html" data-transition="slide" data-icon="arrow-r">Invite</a>
             </div>
             <div data-role="content">
 				<script type="text/javascript"> var retrievedObject = localStorage.getItem('username'); </script>
