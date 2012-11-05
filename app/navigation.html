@@ -34,8 +34,11 @@
 			<div data-role="content" style="width:100%; height:100%; padding:0;"> 
 
 				<section id="wrapper" style="width:100%; height:100%;">
-					<div id="prev" data-theme="b" data-inline="true" data-mini="true" data-role="button">Prev</div>
-					<div id="next" data-theme="b" data-inline="true" data-mini="true" data-role="button">Next</div>
+					<fieldset class="ui-grid-a">
+						<div class="ui-block-a"><button id="prev" data-icon= "arrow-l" data-mini="true" type="submit" data-theme="b">Prev</button></div>
+						<div class="ui-block-b"><button id="next" data-icon="arrow-r" data-iconpos="right" data-mini="true" type="submit" data-theme="b">Next</button></div>	   
+					</fieldset>
+					<p><span id="stepinstruction" align="center">Tap Next to Begin</span></p>
 					<article>
 					  <p><span id="status">Locating...</span></p>
 					  <div id="instructions"></div>
@@ -52,9 +55,31 @@
 						
 						$( '#navigation' ).live( 'pagecreate',function(event){
 							
+							var watchId = navigator.geolocation.watchPosition(updateLocation);
 							navigator.geolocation.getCurrentPosition(success, error, {timeout:10000});
 
 						});
+						
+						function updateLocation(position){
+							map.removeMarkers();
+							
+							map.addMarker({
+						  		lat: 37.788337,
+  								lng: -122.407316, //Union Square dummy data
+  								icon: custompin,
+  								shadow: custompinshadow,
+  								title: "Destination",
+								});
+							
+							
+							map.addMarker({
+						  		lat: position.coords.latitude,
+  								lng: position.coords.longitude,
+  								icon: bluedot,
+  								title: "You are here!",
+								});
+							
+						}
 						
 						function success(position) {
 						  
@@ -118,22 +143,43 @@
 								});
 								
 								
-						map.travelRoute({
-						  origin: [myLat, myLng],
-						  destination: [37.788337,-122.407316], //Union Square dummy data
-						  travelMode: 'driving',
-						  step: function(e) {
-						    $('#instructions').append('<li>'+e.instructions+'</li>');
-						    $('#instructions li:eq(' + e.step_number + ')').delay(450 * e.step_number).fadeIn(200, function() {
-						      map.drawPolyline({
-						        path: e.path,
-						        strokeColor: '#009DFF',
-						        strokeOpacity: 0.7,
-						        strokeWeight: 6
-						      });  
-						    });
-						  }
-						});
+						map.getRoutes({
+				          origin: [myLat, myLng],
+				          destination: [37.788337, -122.407316], //dummy data
+				          travelMode: 'driving',
+				          callback: function(e){
+				            route = new GMaps.Route({
+				              map: map,
+				              route: e[0],
+				              strokeColor: '#00AAFF',
+				              strokeOpacity: 0.7,
+				              strokeWeight: 8
+				            });
+				          }
+				        });
+						
+						$('#next').click(function(e){
+							
+				          e.preventDefault();
+				          route.forward();
+				          
+				          if(route.step_count < route.steps_length){
+				          	$("#stepinstruction").html(""+route.steps[route.step_count].instructions);
+				         	 map.map.setCenter(new google.maps.LatLng( route.steps[route.step_count-1].end_location.lat(),  route.steps[route.step_count-1].end_location.lng()));
+				          }
+				          
+				        });
+				        
+				        $('#prev').click(function(e){
+				          e.preventDefault();
+				          route.back();
+				
+				          if(route.step_count >= 0){
+				          	$("#stepinstruction").html(""+route.steps[route.step_count-1].instructions);
+				          	map.map.setCenter(new google.maps.LatLng( route.steps[route.step_count-1].end_location.lat(),  route.steps[route.step_count-1].end_location.lng()));
+				          }
+				        });
+				      
 								
 							
 						}
