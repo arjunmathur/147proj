@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Settings</title>
+        <title>GrouPS | Settings</title>
 		<meta charset="utf-8">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -15,8 +15,8 @@
         <!-- Home -->
         <div data-role="page" id="settings">
             <div data-theme="a" data-role="header">
-                <h1>social GPS</h1>
-				<a href="index.html" data-icon="home">back</a>
+                <h1>GrouPS</h1>
+				<a href="searchDest.php" data-icon="home">back</a>
             </div>
             <div data-role="content">
                 <div data-role="fieldcontain">

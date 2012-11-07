@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Group Navigation Overview</title>
+        <title>GrouPS | Group Navigation Overview</title>
 		<meta charset="utf-8">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="viewport" content="width=device-width, initial-scale=1"> 
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-		<link rel="stylesheet" href="themes/GrouPSTheme.css" />
-		<link rel="stylesheet" href="style.css" />
 		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
 		
@@ -24,10 +22,10 @@
 					<h1>Confirm</h1>
 				</div>
 				<div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
-					<h3 class="ui-title">Are you sure you'd like to cancel group navigation?</h3>
+					<h3 class="ui-title">Are you sure you'd like to leave group navigation?</h3>
 					<p>Your invited friends will be notifed that you are no longer navigating.</p>
 					<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Return</a>    
-					<a href="index.html" data-role="button" data-inline="true"  data-transition="flip" data-theme="b">Cancel Trip</a>  
+					<a href="index.php" data-ajax="false" data-role="button" data-inline="true"  data-transition="flip" data-theme="b">Leave Group</a>  
 				</div>
 			</div>
 			
@@ -39,7 +37,7 @@
 					<h3 class="ui-title">Start early?</h3>
 					<p>You still have 15 minutes to leave. Do you want to start early?</p>
 					<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Cancel</a>    
-					<a href="nav_overview.html" data-role="button" data-inline="true"  data-transition="slide" data-theme="b">Start Navigation</a>  
+					<a href="navigation.php" data-ajax="false" data-role="button" data-inline="true"  data-transition="slide" data-theme="b">Start Navigation</a>  
 				</div>
 			</div>
 			

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Add Contacts</title>
+        <title>GrouPS | Add Contacts</title>
 		<meta charset="utf-8">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -13,14 +13,14 @@
         <!-- Home -->
         <div data-role="page" id="addContacts" data-theme="a">
             <div data-theme="a" data-role="header">
-                <a href="index.php" data-icon="home">back</a>
+                <a href="searchDest.php" data-ajax="false" data-icon="home">back</a>
 				<h1>GrouPS</h1>
-				<a href="wait_replies.html" data-transition="slide" data-icon="arrow-r">Invite</a>
+				<a href="wait_replies.php"  data-transition="slide" data-icon="arrow-r">Invite</a>
             </div>
             <div data-role="content">
 				<script type="text/javascript"> var retrievedObject = localStorage.getItem('username');</script>
 				
-				<label for="addedList"> Added: </h3>
+				<label for="addedList"> Added: </label>
 				<ul data-role="listview" data-inset="true" class="addedList"></ul>
 				<div data-role="collapsible">
 					<h3> Add Friends for Navigation </h3>
@@ -31,7 +31,7 @@
 							$result = mysql_query($query);
 							while($row = mysql_fetch_assoc($result)){
 								$contactName = $row["user_contact"];
-								echo "<li onclick = \"add(this)\"><a>$contactName</a></li>";
+								echo "<li value=\"$contactName\" onclick = \"add(this)\"><a>$contactName</a></li>";
 							}
 						?>
 					</ul>
@@ -39,7 +39,18 @@
             </div>
         </div>
         <script>
-        	function sortContacts() {
+			
+			/*function addFriendsToDB() {
+				var toAdd = $('.addedList').children();
+				var user = localStorage.getItem('username');
+				for (int i = 0; i < toAdd.length; i++){
+					$.post("submitFriends.php", {user: "test", toAdd:toAdd[i].getAttribute('value')}, function(data) {
+				
+							});
+				}
+			}*/
+			
+			function sortContacts() {
 			  var lis = $('.contacts').children();
 			  var vals = [];
 				

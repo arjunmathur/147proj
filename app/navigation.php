@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Navigation</title>
+        <title>GrouPS | Navigation</title>
 		<meta charset="utf-8">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -16,7 +16,7 @@
             <div data-theme="a" data-role="header">
                 <a href="#confirmCancel" data-rel="popup" data-theme="c" data-transition="flow" data-icon="delete">Cancel</a>
 				<h1>GrouPS</h1>
-				<a href="groupStatus.html" data-theme="b" data-transition="flip" data-icon="info">Group Status</a>
+				<a href="groupStatus.php" data-theme="b" data-transition="flip" data-icon="info">Group Status</a>
             </div>
             
 			
@@ -25,10 +25,10 @@
 					<h1>Confirm</h1>
 				</div>
 				<div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
-					<h3 class="ui-title">Are you sure you'd like to cancel group navigation?</h3>
+					<h3 class="ui-title">Are you sure you'd like to leave group navigation?</h3>
 					<p>Your invited friends will be notifed that you are no longer navigating.</p>
 					<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Return</a>    
-					<a href="index.php" data-role="button" data-ajax="false" data-inline="true"  data-transition="flip" data-theme="b">Cancel Trip</a>  
+					<a href="index.php" data-role="button" data-ajax="false" data-inline="true"  data-transition="flip" data-theme="b">Leave Group</a>  
 				</div>
 			</div>
 			
