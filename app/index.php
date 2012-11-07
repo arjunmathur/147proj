@@ -36,17 +36,7 @@
   					<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 					
 					<script type="text/javascript">
-						var service; var map; var searchBox; var latlng; var markersArray = []; var myLat; var myLng; var bluedot; var custompin; var custompinshadow;
-						
-						$(window).bind( 'orientationchange', function(e){
-						    if ($.event.special.orientationchange.orientation() == "portrait") {
-						        mapcanvas.style.height = '355px'; //TODO: how to make 100%
-						  		mapcanvas.style.width = '320px';
-						    } else {
-						        mapcanvas.style.height = '200px'; //TODO: how to make 100%
-						  		mapcanvas.style.width = '480px';
-						    }
-						});
+						var service; var map; var searchBox; var latlng; var placesArray = []; var myLat; var myLng; var bluedot; var custompin; var custompinshadow;
 						
 						/* On page load, get geolocation and create map */
 						$(document).bind('pageinit',function(event){
@@ -85,18 +75,18 @@
 							
 							
 						function pinSearchResults(results, status) {
-								
+							placesArray = [];
 							var bounds = new google.maps.LatLngBounds();
 						  if (status == google.maps.places.PlacesServiceStatus.OK) {
 							for (var i = 0; i < results.length; i++) {
 							  var place = results[i];
-							  
+							  placesArray.push(place);
 							  var html = '<FONT COLOR="004FA3"><p><strong>' + 
   									place.name + 
   									'</strong></p><p>' + 
   									place.formatted_address + 
   									'</p></FONT>' + 
-                 					"<tr><td></td><td><input type='button' value='Navigate Here' onclick='foundDest(this)'/></td></tr>";
+                 					"<tr><td></td><td><input type='button' value='Navigate Here' onclick='foundDest(" + i + ")'/></td></tr>";
 							  
 							  map.addMarker({
 							  	animation: google.maps.Animation.DROP,
@@ -118,10 +108,16 @@
 						}
 							
 						
-						function foundDest(marker){
-							//var destPos = marker.getPosition();
-							//var destLat = destPos.lat();
-							//var destLng = destPos.lng();
+						function foundDest(placesIndex){
+							var place = markersArray[placesIndex];
+							var destName = place.name;
+							var destAddr = place.formatted_address;
+							var destLat = place.geometry.location.lat();
+							var destLng = place.geometry.location.lng();
+							$.post("submitDest.php", {destName: destName, destAddr: destAddr, destLat:destLat, destLng:destLng, user: "test"}, function(data) {
+				
+							});
+							
 							$.mobile.changePage("addContacts.php");
 						}
 						

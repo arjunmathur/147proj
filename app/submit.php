@@ -36,7 +36,7 @@
 				// Save the username in local storage. That way you
 				// can access it later even if the user closes the app.
 				localStorage.setItem('username', '<?=$_POST["username"]?>');
-				$.mobile.changePage("index.html", { transition: "flip", reloadPage: true} );
+				$.mobile.changePage("index.php", { transition: "flip", reloadPage: true} );
 			</script>
 			<?php
 			echo "<p>Welcome <strong>".$_POST["username"]."</strong>. You are now logged in.</p>";

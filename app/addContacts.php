@@ -13,12 +13,12 @@
         <!-- Home -->
         <div data-role="page" id="addContacts" data-theme="a">
             <div data-theme="a" data-role="header">
-                <a href="index.html" data-icon="home">back</a>
+                <a href="index.php" data-icon="home">back</a>
 				<h1>GrouPS</h1>
 				<a href="wait_replies.html" data-transition="slide" data-icon="arrow-r">Invite</a>
             </div>
             <div data-role="content">
-				<script type="text/javascript"> var retrievedObject = localStorage.getItem('username'); </script>
+				<script type="text/javascript"> var retrievedObject = localStorage.getItem('username');</script>
 				
 				<label for="addedList"> Added: </h3>
 				<ul data-role="listview" data-inset="true" class="addedList"></ul>
@@ -36,7 +36,6 @@
 						?>
 					</ul>
 				</div>
-				
             </div>
         </div>
         <script>
