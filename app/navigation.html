@@ -49,9 +49,18 @@
   					<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 					
 					<script type="text/javascript">
-						var service; var map; var latlng; var markersArray = []; var myLat; var myLng; var bluedot; var custompin; var custompinshadow;
+						var service; var map; var mapcanvas; var latlng; var markersArray = []; var myLat; var myLng; var bluedot; var custompin; var custompinshadow;
 						
-						
+						$(window).bind( 'orientationchange', function(e){
+						    if ($.event.special.orientationchange.orientation() == "portrait") {
+						        mapcanvas.style.height = '355px'; //TODO: how to make 100%
+						  		mapcanvas.style.width = '320px';
+						    } else {
+						        mapcanvas.style.height = '200px'; //TODO: how to make 100%
+						  		mapcanvas.style.width = '480px';
+						    }
+						});
+												
 						
 						$( '#navigation' ).live( 'pagecreate',function(event){
 							
@@ -88,7 +97,7 @@
 						 myLat = position.coords.latitude;
 						 myLng = position.coords.longitude;
 						  
-						 var mapcanvas = document.createElement('div');
+						 mapcanvas = document.createElement('div');
 						  mapcanvas.id = 'mapcanvas';
 						  mapcanvas.style.height = '355px'; //TODO: how to make 100%
 						  mapcanvas.style.width = '320px';
