@@ -23,14 +23,13 @@
 
 	</div><!-- /header -->
 
-	<div data-role="content">	
-		
+	<div data-role="content">			
 		<?php
 		include("config.php");
 		$query = "SELECT * FROM users WHERE username = '".$_POST["username"]."'";
 		$result = mysql_query($query);
 		$row = mysql_fetch_array($result);
-		if ($row['password'] == $_POST["password"]) {
+		if (!is_null($row['username']) AND ($row['username'] == $_POST["username"]) AND $row['password'] == $_POST["password"]) {
 			?>
 			<script type="text/javascript">
 				// Save the username in local storage. That way you
@@ -39,12 +38,12 @@
 				$.mobile.changePage("index.php", { transition: "flip", reloadPage: true} );
 			</script>
 			<?php
-			echo "<p>Welcome <strong>".$_POST["username"]."</strong>. You are now logged in.</p>";
-			
+			echo "<p>Welcome <strong>".$_POST["username"]."</strong>.</p>";
 		} else {
-			 echo "<p>There seems to have been an error.</p>";
+			 echo "<p>The username password combination is incorrect.</p>";
+			 ?><script type="text/javascript">$.mobile.changePage("login.php");</script>
+			 <?php
 		}
-		
 		?>
 	</div><!-- /content -->
 
