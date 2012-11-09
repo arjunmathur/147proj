@@ -22,17 +22,30 @@
 	</div><!-- /header -->
 
 	<div data-role="content">
-		<div data-role="popup" id="submit" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
-			<div data-role="header" data-theme="a" class="ui-corner-top">
-				<h1>Confirm</h1>
-			</div>
-			<div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
-				<h3 class="ui-title">Would you like to start?</h3>
-				<p>People who haven't joined will not be able to join after you start.</p>
-				<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Cancel</a>    
-				<a href="nav_overview.html" data-role="button" data-inline="true"  data-transition="slide" data-theme="b">Start Navigation</a>  
-			</div>
+		
+		
+		<div data-role="popup" id="popupCreateAccount" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
+			<form>
+				<div style="padding:10px 20px;">
+				  <h3>Create New Account</h3>
+		          <label for="un" class="ui-hidden-accessible">Username:</label>
+		          <input type="text" name="user" id="un" value="" placeholder="Username" data-theme="a" />
+
+		          <label for="pw" class="ui-hidden-accessible">Password:</label>
+		          <input type="password" name="pass" id="pw" value="" placeholder="Password" data-theme="a" />
+		          
+		          <label for="pw2" class="ui-hidden-accessible">Confirm Password:</label>
+		          <input type="password" name="pass2" id="pw2" value="" placeholder="Confirm Password" data-theme="a" />
+		          
+		          <label for="em" class="ui-hidden-accessible">E-Mail Address:</label>
+		          <input type="email" name="email" id="em" value="" placeholder="E-Mail Address" data-theme="a" />
+
+		    	  <button type="submit" data-theme="b">Create Account</button>
+				</div>
+			</form>
 		</div>
+		
+		
 		<div data-role="fieldcontain">
 			<form action="submit.php" method="post">
 				<label for="usernameBox">Username:</label>
@@ -43,6 +56,8 @@
 			</form>
 		</div>	
 		<div id="info"></div>	
+		
+		<a href="#popupCreateAccount" data-icon="plus" id="newAccount" data-role="button" data-rel="popup" data-theme="c" data-transition="flow">Create New Account</a>
 	
 	</div><!-- /content -->
 
@@ -67,6 +82,17 @@
 		$("#info").hide();
 	});
 	</script>
+	
+	<div data-role="footer" data-id="samebar" data-position="fixed" data-tap-toggle="false">
+		<div data-role="navbar" class="nav-glyphish-example" data-grid="a">
+		<ul>
+			<li><a href="#" id="login" data-icon="home" class="ui-btn-active ui-state-persist">Log In</a></li>
+			<li><a href="createAccount.php" id="createaccount" data-icon="plus" >Create Account</a></li>
+			
+		</ul>
+		</div>
+	</div>
+
 </div><!-- /page -->
 
 </body>
