@@ -20,7 +20,7 @@
 			
 			<div data-role="popup" id="help" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
 				<div data-role="header" data-theme="a" class="ui-corner-top">
-					<h1>What is GrouPS?</h1>
+					<h1>Help</h1>
 				</div>
 				<div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
 					<h3 class="ui-title">GrouPS allows your group of friends to all arrive at the same time. </h3>

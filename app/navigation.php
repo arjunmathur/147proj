@@ -34,6 +34,7 @@
 			
 			<div data-role="content" style="width:100%; height:100%; padding:0;"> 
 
+
 				<section id="wrapper" style="width:100%; height:100%;">
 					<fieldset class="ui-grid-a">
 						<div class="ui-block-a"><button id="prev" data-icon= "arrow-l" data-mini="true" type="submit" data-theme="b">Prev</button></div>
@@ -50,7 +51,8 @@
   					<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 					
 					<script type="text/javascript">
-						var service; var map; var mapcanvas; var latlng; var markersArray = []; var myLat; var myLng; var bluedot; var custompin; var custompinshadow;
+						var service; var map; var mapcanvas; var latlng; var markersArray = []; var myLat; var myLng; var bluedot; var custompin; var custompinshadow; var destLat; var destLng;
+		
 						
 						$(window).bind( 'orientationchange', function(e){
 						    if ($.event.special.orientationchange.orientation() == "portrait") {
@@ -63,7 +65,17 @@
 						});
 												
 						
-						$( '#navigation' ).live( 'pagecreate',function(event){
+						$('#navigation' ).live( 'pagecreate',function(event){
+							alert("poop");
+							
+				            $.post("getDest.php", {user: 'test'}, function(data) {
+				            		alert(data.lat);
+				            	
+											}, "json");
+										//$.mobile.changePage("navigation.php", {reloadPage: true});
+								
+			
+							
 							
 							var watchId = navigator.geolocation.watchPosition(updateLocation);
 							navigator.geolocation.getCurrentPosition(success, error, {timeout:10000});
@@ -74,8 +86,8 @@
 							map.removeMarkers();
 							
 							map.addMarker({
-						  		lat: 37.788337,
-  								lng: -122.407316, //Union Square dummy data
+						  		lat: destLat,
+  								lng: destLng, //Union Square dummy data
   								icon: custompin,
   								shadow: custompinshadow,
   								title: "Destination",
@@ -145,8 +157,8 @@
 								});
 								
 						map.addMarker({
-						  		lat: 37.788337,
-  								lng: -122.407316, //Union Square dummy data
+						  		lat: destLat,
+  								lng: destLng, //Union Square dummy data
   								icon: custompin,
   								shadow: custompinshadow,
   								title: "Destination",
@@ -155,7 +167,7 @@
 								
 						map.getRoutes({
 				          origin: [myLat, myLng],
-				          destination: [37.788337, -122.407316], //dummy data
+				          destination: [destLat, destLng], //dummy data
 				          travelMode: 'driving',
 				          callback: function(e){
 				            route = new GMaps.Route({

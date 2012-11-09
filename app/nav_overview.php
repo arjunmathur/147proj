@@ -41,6 +41,8 @@
 				</div>
 			</div>
 			
+			
+			
             <div data-role="content">
 				<a href="#startEarly" data-theme="b" data-rel="popup" data-position-to="window" data-role="button"  data-transition="flow">Start</a>
 				<h2>Leave in: 15 minutes</h2>
@@ -69,8 +71,8 @@
 				</ol>
             </div>
         </div>
-        <script>
-            //App custom javascript
+        <script type = "text/javascript">
+        	//Nothing here
         </script>
     </body>
 </html>
