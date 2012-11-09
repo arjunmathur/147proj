@@ -42,14 +42,18 @@
 				<input type="submit" value="Login">
 			</form>
 		</div>	
-		<div id="info">hey</div>	
+		<div id="info"></div>	
 	
 	</div><!-- /content -->
 
     
 	<script type="text/javascript">
-	$("#logout").hide();
-	$("#info").hide();
+	$(document).bind('pageinit',function(event){
+		localStorage.removeItem('username');
+		$("#logout").hide();
+		$("#info").hide();
+	});
+	
 	var retrievedObject = localStorage.getItem('username');
 	if (retrievedObject != "") {
 		$("#form").hide();	
