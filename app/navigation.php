@@ -68,7 +68,7 @@
 						$('#navigation' ).live( 'pagecreate',function(event){
 							alert("poop");
 							
-				            $.post("getDest.php", {user: 'test'}, function(data) {
+				            $.post("getDest.php", {username: 'test'}, function(data) {
 				            		alert(data.lat);
 				            	
 											}, "json");

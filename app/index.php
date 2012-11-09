@@ -43,6 +43,7 @@
             /* On page load, get geolocation and create map */
 						$(document).bind('pageinit',function(event){
 							var user = localStorage.getItem('username');
+							//alert(user);
 							if(!user) $.mobile.changePage("login.php");
 						});
         </script>

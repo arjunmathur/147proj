@@ -36,6 +36,7 @@
 				// can access it later even if the user closes the app.
 				localStorage.setItem('username', '<?=$_POST["username"]?>');
 				$.mobile.changePage("index.php", { transition: "flip", reloadPage: true} );
+				
 			</script>
 			<?php
 			echo "<p>Welcome <strong>".$_POST["username"]."</strong>.</p>";

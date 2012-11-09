@@ -20,19 +20,9 @@
 	</div><!-- /header -->
 
 	<div data-role="content">
-		<div data-role="popup" id="submit" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
-			<div data-role="header" data-theme="a" class="ui-corner-top">
-				<h1>Confirm</h1>
-			</div>
-			<div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
-				<h3 class="ui-title">Would you like to start?</h3>
-				<p>People who haven't joined will not be able to join after you start.</p>
-				<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Cancel</a>    
-				<a href="nav_overview.html" data-role="button" data-inline="true"  data-transition="slide" data-theme="b">Start Navigation</a>  
-			</div>
-		</div>
+		
 		<div data-role="fieldcontain">
-			<form action="submit.php" method="post">
+			<form action="createAccount.php" method="post">
 				<label for="usernameBox">Username:</label>
 				<input type="text" name="username" id="usernameBox">
 				<label for="passwordBox">Password:</label>
@@ -44,31 +34,22 @@
 				<input type="submit" value="Create Account">
 			</form>
 		</div>	
-		<div id="info">hey</div>	
+		<div id="info">
+			<?php
+				?>
+		
+		
+		</div>	
 	
 	</div><!-- /content -->
 
     
 	<script type="text/javascript">
-	$("#logout").hide();
-	$("#info").hide();
-	var retrievedObject = localStorage.getItem('username');
-	if (retrievedObject != "") {
-		$("#form").hide();	
-		$("#logout").show();
-		$("#info").show();
-	}
-	$("#logout").click(function() {
-		localStorage.removeItem('username');
-		$("#form").show();
-		$("#logout").hide();
-		$("#info").hide();
-	});
 	</script>
 	<div data-role="footer" data-id="samebar" data-position="fixed" data-tap-toggle="false">
 		<div data-role="navbar" class="nav-glyphish-example" data-grid="a">
 		<ul>
-			<li><a href="#" id="home" data-icon="home" >Log In</a></li>
+			<li><a href="login.php" id="home" data-icon="home" >Log In</a></li>
 			<li><a href="#" id="key" data-icon="plus" class="ui-btn-active ui-state-persist">Create Account</a></li>
 			
 		</ul>
