@@ -66,10 +66,10 @@
 												
 						
 						$('#navigation' ).live( 'pagecreate',function(event){
-							alert("poop");
 							
 				            $.post("getDest.php", {username: 'test'}, function(data) {
-				            		alert(data.lat);
+				            		destLat = data.lat;
+				            		destLng = data.lng;
 				            	
 											}, "json");
 										//$.mobile.changePage("navigation.php", {reloadPage: true});
@@ -158,29 +158,46 @@
 								
 						map.addMarker({
 						  		lat: destLat,
-  								lng: destLng, //Union Square dummy data
+  								lng: destLng,
   								icon: custompin,
   								shadow: custompinshadow,
   								title: "Destination",
 								});
 								
+						var bounds = new google.maps.LatLngBounds();
+						mylatlng = new google.maps.LatLng(myLat, myLng);
+						destlatlng = new google.maps.LatLng(destLat, destLng);
+						bounds.extend(mylatlng);
+						bounds.extend(destlatlng);
+						map.map.fitBounds(bounds);
+								
+						map.drawRoute({
+							origin:[myLat, myLng],
+							destination:[destLat, destLng],
+							travelMode: 'driving',
+							strokeColor: '#00AAFF',
+							strokeOpacity: 0.6,
+							strokeWeight: 8
+						});
 								
 						map.getRoutes({
 				          origin: [myLat, myLng],
-				          destination: [destLat, destLng], //dummy data
+				          destination: [destLat, destLng], 
 				          travelMode: 'driving',
 				          callback: function(e){
 				            route = new GMaps.Route({
 				              map: map,
 				              route: e[0],
-				              strokeColor: '#00AAFF',
-				              strokeOpacity: 0.7,
+				              strokeColor: '#1A235E',
+				              strokeOpacity: 0.6,
 				              strokeWeight: 8
 				            });
 				          }
 				        });
+								
 						
 						$('#next').click(function(e){
+							map.setZoom(16);
 							
 				          e.preventDefault();
 				          route.forward();
