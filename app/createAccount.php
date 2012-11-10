@@ -28,7 +28,7 @@
 				<label for="passwordBox">Password:</label>
 				<input type="password" name="password" id="passwordBox">
 				<label for="passwordBox2">Confirm Password:</label>
-				<input type="password" name="password2" id="passwordBox2">
+				<input type="password" name="passwordConfirm" id="passwordBox2">
 				<label for="emailBox">E-Mail Address:</label>
 				<input type="email" name="email" id="emailBox">
 				<input type="submit" value="Create Account">
@@ -36,8 +36,68 @@
 		</div>	
 		<div id="info">
 			<?php
+			if($_POST)
+			{	
+				include("config.php");
+				$createFlag = true;
+				$username = $_POST["username"];
+				$password = $_POST["password"];
+				$passwordConfirm = $_POST["passwordConfirm"];
+				$email = $_POST["email"];
+				
+				if($username == ""){
+					$createFlag = false;
+					echo "Please enter a username\n";
+				}
+				if($password == NULL){
+					$createFlag = false;
+					echo "Please enter a password\n";
+				}
+				if($passwordConfirm == NULL){
+					$createFlag = false;
+					echo "Please confirm your password.\n";
+				}
+				
+				if($password != $passwordConfirm){
+					$createFlag = false;
+					echo "Your password and confirm do not match, please try again.";
+				}
+				if($email == NULL){
+					$createFlag = false;
+					echo "Please enter an email address\n";
+				}
+				
+				if(	$createFlag){
+					$existingUserQuery = "SELECT * FROM users WHERE username = '".$username."'";
+					$result = mysql_query($existingUserQuery);
+					if(mysql_num_rows($result) > 0){
+						$createFlag = false;
+						echo "\nSorry, that username is taken! Please try another one.\n";
+					}
+				}
+				if(	$createFlag){
+				$insertQuery = sprintf("INSERT INTO users " .
+								 " (username, password, cur_trip_id, email_address) " .
+								 " VALUES ('%s', '%s', NULL, '%s');",
+								 mysql_real_escape_string($username),
+								 mysql_real_escape_string($password),
+								 mysql_real_escape_string($email));
+								 
+				$result = mysql_query($insertQuery);
 				?>
-		
+				<script type="text/javascript">
+				// Save the username in local storage. That way you
+				// can access it later even if the user closes the app.
+				localStorage.setItem('username', '<?=$_POST["username"]?>');
+				$.mobile.changePage("index.php", { transition: "flip", reloadPage: true} );
+				alert("Welcome to GrouPS!");
+				</script>
+				<?php
+				}
+				
+			}
+			?>
+			
 		
 		</div>	
 	

@@ -15,10 +15,10 @@
             <div data-theme="a" data-role="header">
                 <a href="searchDest.php" data-ajax="false" data-icon="home">back</a>
 				<h1>GrouPS</h1>
-				<a href="wait_replies.php"  data-transition="slide" data-icon="arrow-r">Invite</a>
+				<a href="#" id="inviteButton"  data-transition="slide" data-icon="arrow-r">Invite</a>
             </div>
             <div data-role="content">
-				<script type="text/javascript"> var retrievedObject = localStorage.getItem('username');</script>
+				
 				
 				<label for="addedList"> Added: </label>
 				<ul data-role="listview" data-inset="true" class="addedList"></ul>
@@ -27,7 +27,7 @@
 					<ul data-role="listview" data-inset="false" data-filter="true" data-autodividers="true" class="contacts">
 						<?php
 							include("config.php");
-							$query = "SELECT * FROM contacts WHERE user = \"test\" ORDER BY user_contact ASC";
+							$query = "SELECT * FROM contacts WHERE user = '".$_GET["username"]."' ORDER BY user_contact ASC";
 							$result = mysql_query($query);
 							while($row = mysql_fetch_assoc($result)){
 								$contactName = $row["user_contact"];
@@ -37,18 +37,16 @@
 					</ul>
 				</div>
             </div>
-        </div>
-        <script>
-			
-			/*function addFriendsToDB() {
-				var toAdd = $('.addedList').children();
-				var user = localStorage.getItem('username');
-				for (int i = 0; i < toAdd.length; i++){
-					$.post("submitFriends.php", {user: "test", toAdd:toAdd[i].getAttribute('value')}, function(data) {
-				
-							});
+			<script type="text/javascript">
+			$("#inviteButton").click(function(){
+	            	var toAdd = $('.addedList').children();
+					var username = localStorage.getItem('username');
+					for (var i = 0; i < toAdd.length; i++){
+					$.post("submitFriends.php", {username: username, toAdd:toAdd[i].getAttribute('value')}, function(data) {
+					});
 				}
-			}*/
+	         });
+			
 			
 			function sortContacts() {
 			  var lis = $('.contacts').children();
@@ -86,5 +84,7 @@
 				 $('.contacts').listview('refresh');
 			}
         </script>
+        </div>
+        
     </body>
 </html>

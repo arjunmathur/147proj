@@ -10,15 +10,16 @@
 		<link rel="stylesheet" href="gmaps.css" type='text/css'/>
 		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+		
   		
 	</head>	
 	
 	<body>
 		<div data-role="page" data-theme="a" id="home" style="width:100%; height:100%;">
 			<div data-role="header">
-				<a href="settings.php" data-icon="gear" >Settings</a>
+				<a href="index.php" data-icon="arrow-l" data-transition="slide">Back</a>
 				<h1>GrouPS</h1>
-				<a href="addContacts.php" data-ajax="false" data-icon="arrow-r" data-transition="slide" class="ui-btn-right">Add Friends</a>
+				<a href="settings.php" data-icon="gear" >Settings</a>
 			</div>
 			
 			<div data-role="content" style="width:100%; height:100%; padding:0;"> 
@@ -127,11 +128,18 @@
 							var destAddr = place.formatted_address;
 							var destLat = place.geometry.location.lat();
 							var destLng = place.geometry.location.lng();
-							$.post("submitDest.php", {destName: destName, destAddr: destAddr, destLat:destLat, destLng:destLng, user: "test"}, function(data) {
+							$.post("submitDest.php", {destName: destName, destAddr: destAddr, destLat:destLat, destLng:destLng, user: localStorage.getItem('username')}, function(data) {
 				
 							});
 							
-							$.mobile.changePage("addContacts.php", {reloadPage: true});
+							//$.post("addContacts.php", {username: localStorage.getItem('username')}, function(data) {
+							//});
+							
+							//window.location = "addContacts.php";
+							$.mobile.changePage("addContacts.php", {
+								type: "get",
+								data: "username="+localStorage.getItem('username')
+							});
 						}
 						
 						

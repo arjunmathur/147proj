@@ -2,8 +2,9 @@
 <html>
 
 <head>
-	<title>GrouPS | Login</title> 
+	<title>GrouPS</title> 
 	<meta charset="utf-8">
+	<link rel="apple-touch-startup-image" href="startup.png">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
@@ -17,8 +18,6 @@
 
 	<div data-role="header">
 	<h1>Log in</h1>
-	<a href="#" data-icon="check" id="logout" class="ui-btn-right">Logout</a>
-
 	</div><!-- /header -->
 
 	<div data-role="content">
@@ -38,24 +37,9 @@
 
     
 	<script type="text/javascript">
-	localStorage.removeItem('username');
-	$(document).bind('pageinit',function(event){
-		
-		$("#logout").hide();
-		$("#info").hide();
-	});
 	
-	var retrievedObject = localStorage.getItem('username');
-	if (retrievedObject != "") {
-		$("#form").hide();	
-		$("#logout").show();
-		$("#info").show();
-	}
-	$("#logout").click(function() {
-		localStorage.removeItem('username');
-		$("#form").show();
-		$("#logout").hide();
-		$("#info").hide();
+	$(document).bind('pageinit',function(event){
+		if(localStorage.getItem("username") != "") $.mobile.changePage("index.php");
 	});
 	</script>
 	

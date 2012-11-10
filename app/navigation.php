@@ -69,7 +69,7 @@
 						$(document).bind('pageinit',function(event){
 							navigator.geolocation.getCurrentPosition(success, error);
 												
-				            $.post("getDest.php", {username: 'test'}, function(data) {
+				            $.post("getDest.php", {username: localStorage.getItem('username')}, function(data) {
 				            		destLat = data.lat;
 				            		destLng = data.lng;
 				            	
