@@ -55,6 +55,7 @@
 		
 						
 						$(window).bind( 'orientationchange', function(e){
+
 						    if ($.event.special.orientationchange.orientation() == "portrait") {
 						        mapcanvas.style.height = '355px'; //TODO: how to make 100%
 						  		mapcanvas.style.width = '320px';
@@ -65,24 +66,21 @@
 						});
 												
 						
-						$('#navigation' ).live( 'pagecreate',function(event){
-							
+						$(document).bind('pageinit',function(event){
+							navigator.geolocation.getCurrentPosition(success, error);
+												
 				            $.post("getDest.php", {username: 'test'}, function(data) {
 				            		destLat = data.lat;
 				            		destLng = data.lng;
 				            	
 											}, "json");
-										//$.mobile.changePage("navigation.php", {reloadPage: true});
-								
-			
-							
-							
+											
 							var watchId = navigator.geolocation.watchPosition(updateLocation);
-							navigator.geolocation.getCurrentPosition(success, error, {timeout:10000});
-
+								
 						});
 						
 						function updateLocation(position){
+							
 							map.removeMarkers();
 							
 							map.addMarker({
@@ -106,117 +104,111 @@
 						function success(position) {
 						  
 						  $('#status').html("");
+						  
 						 latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 						 myLat = position.coords.latitude;
 						 myLng = position.coords.longitude;
 						  
 						 mapcanvas = document.createElement('div');
 						  mapcanvas.id = 'mapcanvas';
-						  mapcanvas.style.height = '355px'; //TODO: how to make 100%
+						  mapcanvas.style.height = '355px'; 
 						  mapcanvas.style.width = '320px';
-							
+						 
 						  $('article').append(mapcanvas);
 						  
 						  map = new GMaps({
         				   div: '#mapcanvas',
-       					   lat: position.coords.latitude,
-      					   lng: position.coords.longitude
+       					   lat: myLat,
+      					   lng: myLng
      					  });
      					  service = new google.maps.places.PlacesService(map.map);
-     					  
-     					  
-     					  custompin = new google.maps.MarkerImage(
-  							'custompin.png',
-  							 new google.maps.Size(20,34),
-  							 new google.maps.Point(0,0),
- 							 new google.maps.Point(10,34)
-							);
-
-						   custompinshadow = new google.maps.MarkerImage(
- 							 'custompinshadow.png',
-  							  new google.maps.Size(40,34),
- 							  new google.maps.Point(0,0),
- 							  new google.maps.Point(10,34)
-						  );
-     					  
-     					  bluedot = new google.maps.MarkerImage(
-							'bluedot.png',
-							null, // size
-							null, // origin
-							new google.maps.Point( 8, 8 ), // anchor (move to center of marker)
-							new google.maps.Size( 17, 17 ) // scaled size (required for Retina display icon)
-							);
+ 
+	     					  custompin = new google.maps.MarkerImage(
+	  							'custompin.png',
+	  							 new google.maps.Size(20,34),
+	  							 new google.maps.Point(0,0),
+	 							 new google.maps.Point(10,34)
+								);
+	
+							   custompinshadow = new google.maps.MarkerImage(
+	 							 'custompinshadow.png',
+	  							  new google.maps.Size(40,34),
+	 							  new google.maps.Point(0,0),
+	 							  new google.maps.Point(10,34)
+							  );
+	     					  
+	     					  bluedot = new google.maps.MarkerImage(
+								'bluedot.png',
+								null, // size
+								null, // origin
+								new google.maps.Point( 8, 8 ), // anchor (move to center of marker)
+								new google.maps.Size( 17, 17 ) // scaled size (required for Retina display icon)
+								);
+								
+						google.maps.event.addListener(map.map, 'idle', function() {
 							
+	
+								
+							map.drawRoute({
+								origin:[myLat, myLng],
+								destination:[destLat, destLng],
+								travelMode: 'driving',
+								strokeColor: '#00AAFF',
+								strokeOpacity: 0.6,
+								strokeWeight: 8
+							});
 							
-     					  
-     					  map.addMarker({
-						  		lat: myLat,
-  								lng: myLng,
-  								icon: bluedot,
-  								title: "You are here!",
-								});
-								
-						map.addMarker({
-						  		lat: destLat,
-  								lng: destLng,
-  								icon: custompin,
-  								shadow: custompinshadow,
-  								title: "Destination",
-								});
-								
-						var bounds = new google.maps.LatLngBounds();
-						mylatlng = new google.maps.LatLng(myLat, myLng);
-						destlatlng = new google.maps.LatLng(destLat, destLng);
-						bounds.extend(mylatlng);
-						bounds.extend(destlatlng);
-						map.map.fitBounds(bounds);
-								
-						map.drawRoute({
-							origin:[myLat, myLng],
-							destination:[destLat, destLng],
-							travelMode: 'driving',
-							strokeColor: '#00AAFF',
-							strokeOpacity: 0.6,
-							strokeWeight: 8
-						});
-								
-						map.getRoutes({
-				          origin: [myLat, myLng],
-				          destination: [destLat, destLng], 
-				          travelMode: 'driving',
-				          callback: function(e){
-				            route = new GMaps.Route({
-				              map: map,
-				              route: e[0],
-				              strokeColor: '#1A235E',
-				              strokeOpacity: 0.6,
-				              strokeWeight: 8
-				            });
-				          }
-				        });
-								
-						
-						$('#next').click(function(e){
-							map.setZoom(16);
+							var bounds = new google.maps.LatLngBounds();
+							mylatlng = new google.maps.LatLng(myLat, myLng);
+							destlatlng = new google.maps.LatLng(destLat, destLng);
+							bounds.extend(mylatlng);
+							bounds.extend(destlatlng);
+							map.fitBounds(bounds);
+									
+							map.getRoutes({
+					          origin: [myLat, myLng],
+					          destination: [destLat, destLng], 
+					          travelMode: 'driving',
+					          callback: function(e){
+					            route = new GMaps.Route({
+					              map: map,
+					              route: e[0],
+					              strokeColor: '#1A235E',
+					              strokeOpacity: 0.6,
+					              strokeWeight: 8
+					            });
+					          }
+					        });
+									
+									
+							google.maps.event.clearListeners(map.map, 'idle');
+							$('#next').click(function(e){
 							
-				          e.preventDefault();
-				          route.forward();
-				          
-				          if(route.step_count < route.steps_length){
-				          	$("#stepinstruction").html(""+route.steps[route.step_count].instructions);
-				         	 map.map.setCenter(new google.maps.LatLng( route.steps[route.step_count-1].end_location.lat(),  route.steps[route.step_count-1].end_location.lng()));
-				          }
-				          
-				        });
+							  map.setZoom(16);
+								
+					          e.preventDefault();
+					          route.forward();
+					         
+					          if(route.step_count < route.steps_length){
+					          	$("#stepinstruction").html(""+route.steps[route.step_count].instructions);    	
+					         	 map.map.setCenter(new google.maps.LatLng( route.steps[route.step_count-1].end_location.lat(),  route.steps[route.step_count-1].end_location.lng()));
+					          } else {
+					          	
+					          	map.map.setCenter(new google.maps.LatLng(destLat,destLng));
+					          }
+					          
+					        });
+					        
+					        $('#prev').click(function(e){
+					          e.preventDefault();
+					          route.back();
+					
+					          if(route.step_count >= 0){
+					          	$("#stepinstruction").html(""+route.steps[route.step_count-1].instructions);
+					          	map.map.setCenter(new google.maps.LatLng( route.steps[route.step_count-1].end_location.lat(),  route.steps[route.step_count-1].end_location.lng()));
+					          }
+					        });
 				        
-				        $('#prev').click(function(e){
-				          e.preventDefault();
-				          route.back();
-				
-				          if(route.step_count >= 0){
-				          	$("#stepinstruction").html(""+route.steps[route.step_count-1].instructions);
-				          	map.map.setCenter(new google.maps.LatLng( route.steps[route.step_count-1].end_location.lat(),  route.steps[route.step_count-1].end_location.lng()));
-				          }
 				        });
 				      
 								

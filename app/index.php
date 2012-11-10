@@ -13,9 +13,12 @@
     </head>
     <body>
         <div data-role="page" id="nav_overview" data-theme="a">
+        	
+        
             <div data-theme="a" data-role="header">
-                <a href="#help" data-rel="popup" data-theme="c" data-transition="flow" data-icon="info">Help</a>
+                <a href="#" id="logout" data-theme="b" data-icon="arrow-l">Log Out</a>
 				<h1>GrouPS</h1>
+				<a href="#help" data-rel="popup" data-theme="c" data-transition="flow" data-icon="info">Help</a>
             </div>
 			
 			<div data-role="popup" id="help" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
@@ -29,19 +32,67 @@
 				</div>
 			</div>
 			
+			<div data-role="popup" id="respond" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
+				<div data-role="header" data-theme="a" class="ui-corner-top">
+					<h1>GrouPS Request</h1>
+				</div>
+				<div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
+					<h3 class="ui-title">Would you like to join this group navigation?</h3>
+					<fieldset class="ui-grid-a">
+						<div class="ui-block-a"><a class="accept" data-role="button" data-rel="back" data-theme="b">Accept</a></div>
+						<div class="ui-block-b"><a class="deny" data-role="button" data-theme="c">Deny</a></div> 
+					</fieldset>
+				</div>
+			</div>
+			
             <div data-role="content">
+            	<h3 style="text-align: center;"><span id="status">""</span></h3>
 				<a href="searchDest.php" data-theme="b" data-ajax="false" data-position-to="window" data-role="button"  data-transition="flow">Start New Navigation</a>
-				<h3>Navigation Requests:</h3>
+				<h4>Navigation Requests:</h4>
 				<ul data-role="listview" data-inset="true">
-					<li><a href="nav_overview.php">Tom Rowe invited you to Union Square</a></li>
-					<li><a href="nav_overview.php">Jenna Smith invited you to Ike's Lair</a></li>
+					<li><a class="trip" href="#respond" data-rel="popup" data-trip="1" data-transition="flow" data-position-to="window">Union Square with Tom Rowe</a></li>
+					<li><a class="trip" href="#respond" data-rel="popup" data-trip="2" data-transition="flow" data-position-to="window">Ike's Lair with Jenna Smith</a></li>
 				</ul>
 				
             </div>
+            
+            <script type="text/javascript">
+
+	           	$("#logout").click(function(){
+	            	localStorage.removeItem('username');
+	            	$.mobile.changePage("login.php");	
+	            });
+
+           </script> 
+           
         </div>
         <script>
-            /* On page load, get geolocation and create map */
+            
+            
+            
+            
 						$(document).bind('pageinit',function(event){
+							$('#status').html("Welcome, "+localStorage.getItem('username')+".");
+							
+							var trip = null;
+							$(".trip").bind("click", function(){
+								trip = $(this).attr("data-trip");
+							});
+							$(".accept").bind("click", function(){
+									
+									$.post("setTrip.php", {trip_number: trip}, function(){
+										
+										});
+									
+							});
+							$(".deny").bind("click", function(){
+									$.post("setTrip.php", {trip_number: trip}, function(){
+										
+										});
+									
+									
+							});
+							
 							var user = localStorage.getItem('username');
 							//alert(user);
 							if(!user) $.mobile.changePage("login.php");
