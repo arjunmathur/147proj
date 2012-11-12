@@ -49,9 +49,10 @@
 					<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
   					<script type="text/javascript" src="https://raw.github.com/HPNeo/gmaps/master/gmaps.js"></script>
   					<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+					<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 					
 					<script type="text/javascript">
-						var service; var map; var mapcanvas; var latlng; var markersArray = []; var myLat; var myLng; var bluedot; var custompin; var custompinshadow; var destLat; var destLng;
+						var service; var map; var mapcanvas; var latlng; var markersArray = []; var myLat; var myLng; var bluedot; var custompin; var custompinshadow; var destLat; var destLng; var distMatrix; var destLatLng;
 		
 						
 						$(window).bind( 'orientationchange', function(e){
@@ -72,12 +73,46 @@
 				            $.post("getDest.php", {username: localStorage.getItem('username')}, function(data) {
 				            		destLat = data.lat;
 				            		destLng = data.lng;
-				            	
 											}, "json");
 											
 							var watchId = navigator.geolocation.watchPosition(updateLocation);
 								
 						});
+						
+						
+						function getDistTime(){
+							
+							var checkLatLng = new google.maps.LatLng(myLat, myLng);
+							var matrixService = new google.maps.DistanceMatrixService();
+							
+							matrixService.getDistanceMatrix(
+							  {
+							    origins: [latlng],
+							    destinations: [destlatlng],
+							    travelMode: google.maps.TravelMode.DRIVING,
+							    unitSystem: google.maps.UnitSystem.IMPERIAL,
+							    avoidHighways: false,
+							    avoidTolls: false
+							  }, callback);
+        				
+						}
+						
+						function callback(response, status) {
+						  
+						  if (status == google.maps.DistanceMatrixStatus.OK) {
+						  	
+						  	var results = response.rows[0].elements;
+						    var element = results[0];
+				            var distance = element.distance.text;
+						    var duration = element.duration.text;
+						    alert(""+distance+" / "+duration);
+						    
+						  }
+						  else{
+						  	alert("Distance and estimated time could not be found.");	
+						  }
+						}
+												
 						
 						function updateLocation(position){
 							
@@ -85,7 +120,7 @@
 							
 							map.addMarker({
 						  		lat: destLat,
-  								lng: destLng, //Union Square dummy data
+  								lng: destLng, 
   								icon: custompin,
   								shadow: custompinshadow,
   								title: "Destination",
@@ -99,6 +134,11 @@
   								title: "You are here!",
 								});
 							
+							myLat = position.coords.latitude;
+							myLng = position.coords.longitude;
+							
+							getDistTime();
+							
 						}
 						
 						function success(position) {
@@ -108,6 +148,7 @@
 						 latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 						 myLat = position.coords.latitude;
 						 myLng = position.coords.longitude;
+						 
 						  
 						 mapcanvas = document.createElement('div');
 						  mapcanvas.id = 'mapcanvas';
@@ -179,11 +220,12 @@
 					            });
 					          }
 					        });
+					        
 									
 									
 							google.maps.event.clearListeners(map.map, 'idle');
 							$('#next').click(function(e){
-							
+								
 							  map.setZoom(16);
 								
 					          e.preventDefault();
