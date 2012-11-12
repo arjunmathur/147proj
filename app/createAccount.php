@@ -101,7 +101,8 @@
 				// Save the username in local storage. That way you
 				// can access it later even if the user closes the app.
 				localStorage.setItem('username', '<?=$_POST["username"]?>');
-				$.mobile.changePage("index.php", { transition: "flip", reloadPage: true} );
+				event.preventDefault();
+      	  		window.location.assign("index.php");
 				alert("Welcome to GrouPS!");
 				</script>
 				<?php
