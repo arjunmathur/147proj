@@ -24,7 +24,7 @@
 	</div><!-- /header -->
 
 	<div data-role="content">	
-	<a id="indexLink" href="index.php" data-theme="b" data-ajax="false" data-position-to="window" data-role="button"  data-transition="flow">Start using GrouPS!</a>
+	
 		
 		<?php
 		include("config.php");
@@ -34,10 +34,12 @@
 		if (!is_null($row['username']) AND ($row['username'] == $_POST["username"]) AND $row['password'] == $_POST["password"]) {
 			?>
 			<script type="text/javascript">
+				
 				// Save the username in local storage. That way you
 				// can access it later even if the user closes the app.
 				localStorage.setItem('username', '<?=$_POST["username"]?>');
-				
+				event.preventDefault();
+      	  		window.location.assign("index.php");
 				//$.mobile.changePage("index.php", { reloadPage: true} );
 				
 			</script>
@@ -51,14 +53,7 @@
 		?>
 	</div><!-- /content -->
 
-	<script type="text/javascript">
-		$(document).ready(function(){
-    	$('#indexLink').click(function(event){
-       	  event.preventDefault();
-      	  window.location.assign($(this).attr('href'));
-   		 });
-		});
-	</script>
+
 </div><!-- /page -->
 
 </body>
