@@ -39,15 +39,23 @@
 	<script type="text/javascript">
 	
 	$(document).bind('pageinit',function(event){
-		if(localStorage.getItem("username") != "") $.mobile.changePage("index.php");
+		//if(localStorage.getItem("username") != "") $.mobile.changePage("index.php");
 	});
+	
+	$(document).ready(function(){
+	    $('#accountLink').click(function(event){
+	        event.preventDefault();
+	        window.location.assign($(this).attr('href'));
+	    });
+	});
+	
 	</script>
 	
 	<div data-role="footer" data-id="samebar" data-position="fixed" data-tap-toggle="false">
 		<div data-role="navbar" class="nav-glyphish-example" data-grid="a">
 		<ul>
 			<li><a href="#" id="login" data-icon="home" class="ui-btn-active ui-state-persist">Log In</a></li>
-			<li><a href="createAccount.php" id="createaccount" data-icon="plus" >Create Account</a></li>
+			<li><a id="accountLink" href="createAccount.php" data-ajax="false" id="createaccount" data-icon="plus" >Create Account</a></li>
 			
 		</ul>
 		</div>

@@ -17,7 +17,7 @@
 	<body>
 		<div data-role="page" data-theme="a" id="home" style="width:100%; height:100%;">
 			<div data-role="header">
-				<a href="index.php" data-icon="arrow-l" data-transition="slide">Back</a>
+				<a id="indexLink" href="index.php" data-icon="arrow-l">Back</a>
 				<h1>GrouPS</h1>
 				<a href="settings.php" data-icon="gear" >Settings</a>
 			</div>
@@ -50,6 +50,13 @@
 						    }
 						});
 						
+						$(document).ready(function(){
+						    $('#indexLink').click(function(event){
+						        event.preventDefault();
+						        window.location.assign($(this).attr('href'));
+						    });
+						});
+												
 						/* On page load, get geolocation and create map */
 						$(document).bind('pageinit',function(event){
 							var user = localStorage.getItem('username');

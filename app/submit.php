@@ -18,12 +18,14 @@
 <div data-role="page">
 
 	<div data-role="header">
-		<h1>Submit</h1>
-		<a href="#" data-icon="check" id="logout" class="ui-btn-right">Logout</a>
+		<h1>Welcome!</h1>
+		
 
 	</div><!-- /header -->
 
-	<div data-role="content">			
+	<div data-role="content">	
+	<a id="indexLink" href="index.php" data-theme="b" data-ajax="false" data-position-to="window" data-role="button"  data-transition="flow">Start using GrouPS!</a>
+		
 		<?php
 		include("config.php");
 		$query = "SELECT * FROM users WHERE username = '".$_POST["username"]."'";
@@ -35,11 +37,12 @@
 				// Save the username in local storage. That way you
 				// can access it later even if the user closes the app.
 				localStorage.setItem('username', '<?=$_POST["username"]?>');
-				$.mobile.changePage("index.php", { transition: "flip", reloadPage: true} );
+				
+				//$.mobile.changePage("index.php", { reloadPage: true} );
 				
 			</script>
 			<?php
-			echo "<p>Welcome <strong>".$_POST["username"]."</strong>.</p>";
+			//echo "<p>Welcome <strong>".$_POST["username"]."</strong>.</p>";
 		} else {
 			 echo "<p>The username password combination is incorrect.</p>";
 			 ?><script type="text/javascript">$.mobile.changePage("login.php");</script>
@@ -49,10 +52,11 @@
 	</div><!-- /content -->
 
 	<script type="text/javascript">
-		$("#logout").click(function() {
-			localStorage.removeItem('username');
-			$("#form").show();
-			$("#logout").hide();
+		$(document).ready(function(){
+    	$('#indexLink').click(function(event){
+       	  event.preventDefault();
+      	  window.location.assign($(this).attr('href'));
+   		 });
 		});
 	</script>
 </div><!-- /page -->

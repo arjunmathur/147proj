@@ -47,7 +47,7 @@
 			
             <div data-role="content">
             	<h3 style="text-align: center;"><span id="status">""</span></h3>
-				<a href="searchDest.php" data-theme="b" data-ajax="false" data-position-to="window" data-role="button"  data-transition="flow">Start New Navigation</a>
+				<a id="searchDestLink" href="searchDest.php" data-theme="b" data-ajax="false" data-position-to="window" data-role="button"  data-transition="flow">Start New Navigation</a>
 				<h4>Navigation Requests:</h4>
 				<ul data-role="listview" data-inset="true">
 					<li><a class="trip" href="#respond" data-rel="popup" data-trip="1" data-transition="flow" data-position-to="window">Union Square with Tom Rowe</a></li>
@@ -72,6 +72,7 @@
             
             
 						$(document).bind('pageinit',function(event){
+							
 							$('#status').html("Welcome, "+localStorage.getItem('username')+".");
 							
 							var trip = null;
@@ -96,6 +97,13 @@
 							var user = localStorage.getItem('username');
 							//alert(user);
 							if(!user) $.mobile.changePage("login.php");
+						});
+						
+						$(document).ready(function(){
+						    $('#searchDestLink').click(function(event){
+						        event.preventDefault();
+						        window.location.assign($(this).attr('href'));
+						    });
 						});
         </script>
     </body>

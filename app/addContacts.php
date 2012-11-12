@@ -44,6 +44,7 @@
 					for (var i = 0; i < toAdd.length; i++){
 					$.post("submitFriends.php", {username: username, toAdd:toAdd[i].getAttribute('value')}, function(data) {
 					});
+					$.mobile.changePage("nav_overview.php");
 				}
 	         });
 			

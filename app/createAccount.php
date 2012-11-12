@@ -47,24 +47,34 @@
 				
 				if($username == ""){
 					$createFlag = false;
-					echo "Please enter a username\n";
+					echo "<div>\n";
+					echo "<font color='red'>Please enter a username\n</font>";
+					echo "</div>";
 				}
 				if($password == NULL){
 					$createFlag = false;
-					echo "Please enter a password\n";
+					echo "<div>\n";
+					echo "<font color='red'>Please enter a password\n</font>";
+					echo "</div>";
 				}
 				if($passwordConfirm == NULL){
 					$createFlag = false;
-					echo "Please confirm your password.\n";
+					echo "<div>\n";
+					echo "<font color='red'>Please confirm your password\n</font>";
+					echo "</div>";
 				}
 				
 				if($password != $passwordConfirm){
 					$createFlag = false;
-					echo "Your password and confirm do not match, please try again.";
+					echo "<div>\n";
+					echo "<font color='red'>Your password and confirm do not match, please try again</font>";
+					echo "</div>";
 				}
 				if($email == NULL){
 					$createFlag = false;
-					echo "Please enter an email address\n";
+					echo "<div>\n";
+					echo "<font color='red'>Please enter an email address\n</font>";
+					echo "</div>";
 				}
 				
 				if(	$createFlag){
@@ -72,7 +82,9 @@
 					$result = mysql_query($existingUserQuery);
 					if(mysql_num_rows($result) > 0){
 						$createFlag = false;
-						echo "\nSorry, that username is taken! Please try another one.\n";
+						echo "<div>\n";
+						echo "\n<font color='red'>Sorry, that username is taken! Please try another one\n</font>";
+						echo "</div>";
 					}
 				}
 				if(	$createFlag){
@@ -109,7 +121,7 @@
 	<div data-role="footer" data-id="samebar" data-position="fixed" data-tap-toggle="false">
 		<div data-role="navbar" class="nav-glyphish-example" data-grid="a">
 		<ul>
-			<li><a href="login.php" id="home" data-icon="home" >Log In</a></li>
+			<li><a href="login.php" id="home" data-ajax="false" data-icon="home" >Log In</a></li>
 			<li><a href="#" id="key" data-icon="plus" class="ui-btn-active ui-state-persist">Create Account</a></li>
 			
 		</ul>
