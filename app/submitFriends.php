@@ -18,5 +18,8 @@ $insertQuery = sprintf("INSERT INTO trip_participants " .
 		 mysql_real_escape_string($status));
 
 $result = mysql_query($insertQuery);
+$data = array('trip_id' => "$tripId");
+echo json_encode($data);
+
 
 ?>

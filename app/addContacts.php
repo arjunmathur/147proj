@@ -39,13 +39,25 @@
             </div>
 			<script type="text/javascript">
 			$("#inviteButton").click(function(){
-	            	var toAdd = $('.addedList').children();
-					var username = localStorage.getItem('username');
-					for (var i = 0; i < toAdd.length; i++){
-					$.post("submitFriends.php", {username: username, toAdd:toAdd[i].getAttribute('value')}, function(data) {
-					});
-					$.mobile.changePage("nav_overview.php");
+				var toAdd = $('.addedList').children();
+				if(toAdd.length == 0){
+					alert("Please click on friends to invite");
+					return;
 				}
+				var username = localStorage.getItem('username');
+				var trip_id;
+				for (var i = 0; i < toAdd.length; i++){
+					$.post("submitFriends.php", {username: username, toAdd:toAdd[i].getAttribute('value')}, function(data) {
+						if(i == toAdd.length){
+							trip_id = data.trip_id;
+							$.mobile.changePage("wait_replies.php", {
+								type: "get",
+								data: "trip_id="+trip_id
+							});
+						}
+					}, "json");
+				}
+				
 	         });
 			
 			

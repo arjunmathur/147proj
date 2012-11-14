@@ -43,21 +43,66 @@
             <div data-role="content">
 				<a href="#confirmStart" data-theme="b" data-rel="popup" data-position-to="window" data-role="button"  data-transition="flow">Calculate Group Navigation</a>
 				<h3> Accepted: </h3>
-				<ul data-role="listview" data-inset="false" data-theme="b" data-mini=true>
-					<li>Andy Elder</li>
+				<ul data-role="listview" class="acceptedList" data-inset="false" data-theme="b" data-mini=true>
+					
 				</ul>
 				<h3> Waiting For Reply: </h3>
-				<ul data-icon="back" data-role="listview" data-inset="false" data-theme="e" data-mini=true>
-					<li>Arjun Mathur</li>
+				<ul data-role="listview" class="waitingList" data-inset="false" data-theme="e" data-mini=true>
+					
 				</ul>
 				<h3> Denied: </h3>
-				<ul data-role="listview" data-inset="false" data-mini=true>
-					<li>Kevin Ho</li>
+				<ul data-role="listview" class="deniedList" data-inset="false" data-mini=true>
+					
 				</ul>
             </div>
+			<script type="text/javascript">
+				
+				function timedCount()
+				{ 
+					refreshWaiting();
+					refreshAccepted();
+					//refreshDenied();
+					t=setTimeout("timedCount()",1000);
+				}
+				
+				function refreshWaiting()
+				{
+						$('.waitingList').children().remove();
+						<?php 
+							include("config.php");
+							$query = "SELECT * FROM trip_participants WHERE (trip_id = ".$_GET["trip_id"]." AND STATUS=0)";
+							$result = mysql_query($query);
+							while($row = mysql_fetch_assoc($result)){
+						?>
+								//alert("alert!");
+								$('.waitingList').append("<li><?=$row['username']?></li>");
+								$('.waitingList').listview('refresh');
+						<?php
+							}
+						?>
+				}
+				
+				function refreshAccepted()
+				{		
+						$('.acceptedList').children().remove();
+						<?php 
+							include("config.php");
+							$query = "SELECT * FROM trip_participants WHERE (trip_id = ".$_GET["trip_id"]." AND STATUS=1)";
+							$result = mysql_query($query);
+							while($row = mysql_fetch_assoc($result)){
+						?>
+								//alert('yolo');
+								$('.acceptedList').append("<li><?=$row['username']?></li>");
+								$('.acceptedList').listview('refresh');
+						<?php
+							}
+						?>
+				}
+				
+				// Kick off the timer
+				t=setTimeout("timedCount()",1000);
+			</script>
         </div>
-        <script>
-            //App custom javascript
-        </script>
+        
     </body>
 </html>
