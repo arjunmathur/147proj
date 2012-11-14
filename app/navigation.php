@@ -76,7 +76,7 @@
 				            		destLng = data.lng;
 											}, "json");
 											
-							var watchId = navigator.geolocation.watchPosition(updateLocation);
+							
 								
 						});
 						
@@ -189,6 +189,7 @@
 								
 						google.maps.event.addListener(map.map, 'idle', function() {
 							
+							google.maps.event.clearListeners(map.map, 'idle');
 							
 								
 							map.drawRoute({
@@ -222,9 +223,9 @@
 					          }
 					        });
 					        
-							
+							var watchId = navigator.geolocation.watchPosition(updateLocation);
 									
-							google.maps.event.clearListeners(map.map, 'idle');
+							
 							
 							$('#next').click(function(e){
 								
