@@ -41,6 +41,7 @@
 						<div class="ui-block-b"><button id="next" data-icon="arrow-r" data-iconpos="right" data-mini="true" type="submit" data-theme="b">Next</button></div>	   
 					</fieldset>
 					<p><span id="stepinstruction" align="center">Tap Next to Begin</span></p>
+					<p><span id="distdur" align="center">Distance / Duration</span></p>
 					<article>
 					  <p><span id="status">Locating...</span></p>
 					  <div id="instructions"></div>
@@ -105,7 +106,7 @@
 						    var element = results[0];
 				            var distance = element.distance.text;
 						    var duration = element.duration.text;
-						    alert(""+distance+" / "+duration);
+						    $('#distdur').html(""+distance+" / "+duration);
 						    
 						  }
 						  else{
@@ -188,7 +189,7 @@
 								
 						google.maps.event.addListener(map.map, 'idle', function() {
 							
-	
+							
 								
 							map.drawRoute({
 								origin:[myLat, myLng],
@@ -221,9 +222,10 @@
 					          }
 					        });
 					        
-									
+							
 									
 							google.maps.event.clearListeners(map.map, 'idle');
+							
 							$('#next').click(function(e){
 								
 							  map.setZoom(16);
