@@ -70,9 +70,16 @@
 					</li>
 				</ol>
             </div>
+			<script type = "text/javascript">
+				$(document).bind('pageinit',function(event){		
+					$.post("getDest.php", {username: localStorage.getItem('username')}, function(data) {
+							destLat = data.lat;
+							destLng = data.lng;
+					}, "json");
+						
+				});
+			</script>
         </div>
-        <script type = "text/javascript">
-        	//Nothing here
-        </script>
+       
     </body>
 </html>

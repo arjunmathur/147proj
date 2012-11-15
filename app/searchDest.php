@@ -130,6 +130,7 @@
 							
 						
 						function foundDest(placesIndex){
+							getDistTime();
 							var place = placesArray[placesIndex];
 							var destName = place.name;
 							var destAddr = place.formatted_address;
@@ -210,6 +211,41 @@
 						  var s = document.querySelector('#status');
 						  s.innerHTML = typeof msg == 'string' ? msg : "failed";
 						  s.className = 'fail';
+						}
+						
+						
+						//Get distance to dest stuff
+						function getDistTime(){
+							
+							var checkLatLng = latlng;
+							var matrixService = new google.maps.DistanceMatrixService();
+							
+							matrixService.getDistanceMatrix(
+							  {
+							    origins: [checkLatLng],
+							    destinations: [destlatlng],
+							    travelMode: google.maps.TravelMode.DRIVING,
+							    unitSystem: google.maps.UnitSystem.IMPERIAL,
+							    avoidHighways: false,
+							    avoidTolls: false
+							  }, callback);
+        				
+						}
+						
+						function callback(response, status) {
+						  
+						  if (status == google.maps.DistanceMatrixStatus.OK) {
+						  	
+						  	var results = response.rows[0].elements;
+						    var element = results[0];
+				            var distance = element.distance.text;
+						    var duration = element.duration.text;
+						    $('#distdur').html(""+distance+" / "+duration);
+						    
+						  }
+						  else{
+						  	alert("Distance and estimated time could not be found.");	
+						  }
 						}
 						
 						

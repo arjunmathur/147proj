@@ -59,12 +59,29 @@
 				
 				function timedCount()
 				{ 
-					refreshWaiting();
-					refreshAccepted();
+					updateLists();
+					//refreshWaiting();
+					//refreshAccepted();
 					//refreshDenied();
 					t=setTimeout("timedCount()",1000);
 				}
-				
+				function updateLists(){
+					
+					$.post("refreshReplies.php", {trip_id: <?=$_GET["trip_id"]?>}, function(data) {
+							$('.waitingList').children().remove();
+					$('.acceptedList').children().remove();
+					$('.deniedList').children().remove();
+							$('.waitingList').append(data.waiting);
+							$('.acceptedList').append(data.accepted);
+							$('.deniedList').append(data.denied);
+							$('.waitingList').listview('refresh');
+					$('.acceptedList').listview('refresh');
+					$('.deniedList').listview('refresh');
+					}, "json");
+					
+					
+				}
+				/*
 				function refreshWaiting()
 				{
 						$('.waitingList').children().remove();
@@ -98,7 +115,7 @@
 							}
 						?>
 				}
-				
+				*/
 				// Kick off the timer
 				t=setTimeout("timedCount()",1000);
 			</script>

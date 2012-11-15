@@ -53,7 +53,7 @@
 					<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 					
 					<script type="text/javascript">
-						var service; var map; var mapcanvas; var latlng; var markersArray = []; var myLat; var myLng; var bluedot; var custompin; var custompinshadow; var destLat; var destLng; var distMatrix; var destLatLng;
+						var service; var map; var mapcanvas; var latlng; var myLat; var myLng; var bluedot; var custompin; var custompinshadow; var destLat; var destLng; var distMatrix; var destLatLng;
 		
 						
 						$(window).bind( 'orientationchange', function(e){
@@ -74,9 +74,7 @@
 				            $.post("getDest.php", {username: localStorage.getItem('username')}, function(data) {
 				            		destLat = data.lat;
 				            		destLng = data.lng;
-											}, "json");
-											
-							
+							}, "json");
 								
 						});
 						
@@ -88,7 +86,7 @@
 							
 							matrixService.getDistanceMatrix(
 							  {
-							    origins: [latlng],
+							    origins: [checkLatLng],
 							    destinations: [destlatlng],
 							    travelMode: google.maps.TravelMode.DRIVING,
 							    unitSystem: google.maps.UnitSystem.IMPERIAL,
