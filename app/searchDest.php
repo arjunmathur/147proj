@@ -17,7 +17,7 @@
 	<body>
 		<div data-role="page" data-theme="a" id="home" style="width:100%; height:100%;">
 			<div data-role="header">
-				<a id="indexLink" href="index.php" data-icon="arrow-l">Back</a>
+				<a id="indexLink" data-icon="arrow-l">Back</a>
 				<h1>GrouPS</h1>
 				<a href="settings.php" data-icon="gear" >Settings</a>
 			</div>
@@ -53,14 +53,12 @@
 						$(document).ready(function(){
 						    $('#indexLink').click(function(event){
 						        event.preventDefault();
-						        window.location.assign($(this).attr('href'));
+						        window.location.assign("index.php");
 						    });
 						});
 												
 						/* On page load, get geolocation and create map */
 						$(document).bind('pageinit',function(event){
-							var user = localStorage.getItem('username');
-							if(!user) $.mobile.changePage("login.php");
 						  if (navigator.geolocation) {
 							navigator.geolocation.getCurrentPosition(success, error, {timeout:10000});
 							} else {
@@ -81,7 +79,7 @@
 								});
 							
 							return true;
-							});
+						});
 							
 						function search() {
 							
@@ -130,24 +128,16 @@
 							
 						
 						function foundDest(placesIndex){
-							getDistTime();
 							var place = placesArray[placesIndex];
 							var destName = place.name;
 							var destAddr = place.formatted_address;
 							var destLat = place.geometry.location.lat();
 							var destLng = place.geometry.location.lng();
 							$.post("submitDest.php", {destName: destName, destAddr: destAddr, destLat:destLat, destLng:destLng, user: localStorage.getItem('username')}, function(data) {
-				
+								localStorage.setItem('dest', destName);
+								window.location.assign("addContacts.php");
 							});
 							
-							//$.post("addContacts.php", {username: localStorage.getItem('username')}, function(data) {
-							//});
-							
-							//window.location = "addContacts.php";
-							$.mobile.changePage("addContacts.php", {
-								type: "get",
-								data: "username="+localStorage.getItem('username')
-							});
 						}
 						
 						
@@ -212,43 +202,7 @@
 						  s.innerHTML = typeof msg == 'string' ? msg : "failed";
 						  s.className = 'fail';
 						}
-						
-						
-						//Get distance to dest stuff
-						function getDistTime(){
-							
-							var checkLatLng = latlng;
-							var matrixService = new google.maps.DistanceMatrixService();
-							
-							matrixService.getDistanceMatrix(
-							  {
-							    origins: [checkLatLng],
-							    destinations: [destlatlng],
-							    travelMode: google.maps.TravelMode.DRIVING,
-							    unitSystem: google.maps.UnitSystem.IMPERIAL,
-							    avoidHighways: false,
-							    avoidTolls: false
-							  }, callback);
-        				
-						}
-						
-						function callback(response, status) {
-						  
-						  if (status == google.maps.DistanceMatrixStatus.OK) {
-						  	
-						  	var results = response.rows[0].elements;
-						    var element = results[0];
-				            var distance = element.distance.text;
-						    var duration = element.duration.text;
-						    $('#distdur').html(""+distance+" / "+duration);
-						    
-						  }
-						  else{
-						  	alert("Distance and estimated time could not be found.");	
-						  }
-						}
-						
-						
+
 					</script>
 				</section>	
 			</div>

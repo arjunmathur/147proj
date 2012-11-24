@@ -39,8 +39,8 @@
 				<div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
 					<h3 class="ui-title">Would you like to join this group navigation?</h3>
 					<fieldset class="ui-grid-a">
-						<div class="ui-block-a"><a class="accept" data-role="button" data-rel="back" data-theme="b">Accept</a></div>
-						<div class="ui-block-b"><a class="deny" data-role="button" data-theme="c">Deny</a></div> 
+						<div class="ui-block-a" ><a class="accept" data-role="button" id="acceptbutton" data-theme="b">Accept</a></div>
+						<div class="ui-block-b"><a class="deny" href="#" data-role="button" data-theme="c">Deny</a></div> 
 					</fieldset>
 				</div>
 			</div>
@@ -48,63 +48,75 @@
             <div data-role="content">
             	<h3 style="text-align: center;"><span id="status">""</span></h3>
 				<a id="searchDestLink" href="searchDest.php" data-theme="b" data-ajax="false" data-position-to="window" data-role="button"  data-transition="flow">Start New Navigation</a>
-				<h4>Navigation Requests:</h4>
-				<ul data-role="listview" data-inset="true">
-					<li><a class="trip" href="#respond" data-rel="popup" data-trip="1" data-transition="flow" data-position-to="window">Union Square with Tom Rowe</a></li>
-					<li><a class="trip" href="#respond" data-rel="popup" data-trip="2" data-transition="flow" data-position-to="window">Ike's Lair with Jenna Smith</a></li>
+				<h4>Navigation Invitations:</h4>
+				<ul data-role="listview" class="invitationList" data-inset="true">
+					
 				</ul>
 				
             </div>
             
             <script type="text/javascript">
-
+				var trip;
 	           	$("#logout").click(function(){
 	            	localStorage.removeItem('username');
+					window.clearTimeout(t);
 	            	$.mobile.changePage("login.php");	
 	            });
+				
+				$(document).bind('pageinit',function(event){
+					var user = localStorage.getItem('username');
+					if(!user) $.mobile.changePage("login.php");
+					
+					$('#status').html("Welcome, "+localStorage.getItem('username')+".");
+					
+					$(".accept").bind("click", function(){
+						$.post("acceptInvitation.php", {username: localStorage.getItem('username'), trip_id: trip}, function(data){
+							window.clearTimeout(t);
+							event.preventDefault();
+							window.location.assign("show_replies.php");	
+						});
+					});
+					$(".deny").bind("click", function(){
+						$.post("denyInvitation.php", {username: localStorage.getItem('username'), trip_id: trip}, function(data){
+							$.mobile.changePage("#");
+						});
+					});
+				});
+				
+				
+				
+				$(document).ready(function(){
+					$('#searchDestLink').click(function(event){
+						window.clearTimeout(t);
+						event.preventDefault();
+						window.location.assign($(this).attr('href'));
+					});
+				});
+				
+				
+				function timedCount()
+				{ 
+					updateInvitations();
+					t=setTimeout("timedCount()",1000);
+				}
+				function updateInvitations(){
+					$.post("refreshInvitations.php", {username: localStorage.getItem('username')}, function(data) {
+						$('.invitationList').children().remove();
+						$('.invitationList').append(data);
+						$('.invitationList').listview('refresh');
+						$(".trip").bind("click", function(){
+							trip = $(this).attr("data-trip");
+						});
+					});
+					
+					
+				}
 
+				// Kick off the timer
+				t=setTimeout("timedCount()",1000);
+				
            </script> 
            
         </div>
-        <script>
-            
-            
-            
-            
-						$(document).bind('pageinit',function(event){
-							
-							$('#status').html("Welcome, "+localStorage.getItem('username')+".");
-							
-							var trip = null;
-							$(".trip").bind("click", function(){
-								trip = $(this).attr("data-trip");
-							});
-							$(".accept").bind("click", function(){
-									
-									$.post("setTrip.php", {trip_number: trip}, function(){
-										
-										});
-									
-							});
-							$(".deny").bind("click", function(){
-									$.post("setTrip.php", {trip_number: trip}, function(){
-										
-										});
-									
-									
-							});
-							
-							var user = localStorage.getItem('username');
-							//alert(user);
-							if(!user) $.mobile.changePage("login.php");
-						});
-						
-						$(document).ready(function(){
-						    $('#searchDestLink').click(function(event){
-						        event.preventDefault();
-						        window.location.assign($(this).attr('href'));
-						    });
-						});
-        </script>
     </body>
 </html>

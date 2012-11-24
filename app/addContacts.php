@@ -13,31 +13,34 @@
         <!-- Home -->
         <div data-role="page" id="addContacts" data-theme="a">
             <div data-theme="a" data-role="header">
-                <a href="searchDest.php" data-ajax="false" data-icon="home">back</a>
+                <a href="searchDest.php" data-icon="home">back</a>
 				<h1>GrouPS</h1>
 				<a href="#" id="inviteButton"  data-transition="slide" data-icon="arrow-r">Invite</a>
             </div>
             <div data-role="content">
-				
-				
-				<label for="addedList"> Added: </label>
-				<ul data-role="listview" data-inset="true" class="addedList"></ul>
-				<div data-role="collapsible">
-					<h3> Add Friends for Navigation </h3>
-					<ul data-role="listview" data-inset="false" data-filter="true" data-autodividers="true" class="contacts">
-						<?php
-							include("config.php");
-							$query = "SELECT * FROM contacts WHERE user = '".$_GET["username"]."' ORDER BY user_contact ASC";
-							$result = mysql_query($query);
-							while($row = mysql_fetch_assoc($result)){
-								$contactName = $row["user_contact"];
-								echo "<li value=\"$contactName\" onclick = \"add(this)\"><a>$contactName</a></li>";
-							}
-						?>
-					</ul>
-				</div>
+					<h3 style="text-align: center;"><FONT COLOR="38C5FC"><span id="status">""</span></FONT></h3>
+					<label for="addedList"> Added: </label>
+					<div data-role="collapsible" data-collapsed="false" >
+						<h3> Added Friends </h3>
+						<ul data-role="listview" data-inset="false" class="addedList"></ul>
+					</div>
+					<div data-role="collapsible" data-collapsed="false" >
+						<h3> Add Friends for Navigation </h3>
+						<ul data-role="listview" data-inset="false" data-filter="true" data-autodividers="true" class="contacts">
+							
+						</ul>
+					</div>
             </div>
 			<script type="text/javascript">
+			$(document).bind('pageinit',function(event){
+				$.post("getContacts.php", {username: localStorage.getItem('username')}, function(data) {
+					$('.contacts').append(data);
+					$('.contacts').listview('refresh');
+				});
+				
+				$('#status').html(""+localStorage.getItem('dest'));
+				
+			});
 			$("#inviteButton").click(function(){
 				var toAdd = $('.addedList').children();
 				if(toAdd.length == 0){
@@ -50,14 +53,21 @@
 					$.post("submitFriends.php", {username: username, toAdd:toAdd[i].getAttribute('value')}, function(data) {
 						if(i == toAdd.length){
 							trip_id = data.trip_id;
-							$.mobile.changePage("wait_replies.php", {
-								type: "get",
-								data: "trip_id="+trip_id
-							});
+							event.preventDefault();
+							window.location.assign("wait_replies.php");
 						}
 					}, "json");
 				}
 				
+	         });
+	         
+	         
+	         $(document).ready(function(){
+		         $('#newFriendsLink').click(function(event){
+		       		 event.preventDefault();
+		      		 window.location.assign("addNewContacts.php");
+		  		  });
+		  		  
 	         });
 			
 			
@@ -96,7 +106,16 @@
 				 $('.addedList').listview('refresh');
 				 $('.contacts').listview('refresh');
 			}
-        </script>
+			</script>
+			<div data-role="footer" data-id="samebar" data-position="fixed" data-tap-toggle="false">
+				<div data-role="navbar" class="nav" data-grid="a" data-mini="true">
+				<ul>
+					<li><a href="#" id="addFriends" data-icon="plus" class="ui-btn-active ui-state-persist">Add Friends</a></li>
+					<li><a id="newFriendsLink" data-icon="search" >Search New Friends</a></li>
+					
+				</ul>
+				</div>
+			</div>
         </div>
         
     </body>

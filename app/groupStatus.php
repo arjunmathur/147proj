@@ -21,32 +21,30 @@
             <div data-role="content">
 				
 				<h2>My Group's Status</h2>
-				<ol data-role="listview" data-inset="true">
-					<li>
-						<h3>Andy Elder</h3>
-						<p class="ui-li-aside"><strong>7 Minutes Ahead</strong></p>
-						<p><strong>Enroute.   </strong>15 Miles (32 Minutes)</p>
-					</li>
-					<li>
-						<h3><FONT COLOR="38C5FC">Kevin Ho (You)</FONT></h3>
-						<p class="ui-li-aside"><strong>On Time</strong></p>
-						<p><strong>Enroute.   </strong>7 Miles (15 Minutes)</p>
-					</li>
-					<li>
-						<h3>Stephanie Harris</h3>
-						<p class="ui-li-aside"><strong>5 Minutes Behind</strong></p>
-						<p><strong>Enroute.   </strong>4 Miles (8 Minutes)</p>
-					</li>
-					<li>
-						<h3>Jason Armstrong</h3>
-						<p class="ui-li-aside"><strong>Waiting to Leave</strong></p>
-						<p><strong>Waiting to Leave.   </strong>2 Miles (5 Minutes)</p>
-					</li>
+				<ol class="statusList" data-role="listview" data-inset="true">
 				</ol>
+				<script type="text/javascript">
+		            function updateLists(){
+							
+							$.post("getNavOverview.php", {username: localStorage.getItem('username')}, function(data) {
+								$('.statusList').children().remove();
+								$('.statusList').append(data.listData);
+								$('.statusList').listview('refresh');
+							}, "json");	
+						}
+						
+						
+						function timedCount(){
+							
+							updateLists();
+							t=setTimeout("timedCount()",1000);
+						}
+						
+						t=setTimeout("timedCount()",1000);
+		        </script>
+
+				
             </div>
         </div>
-        <script>
-            //App custom javascript
-        </script>
-    </body>
+      </body>
 </html>

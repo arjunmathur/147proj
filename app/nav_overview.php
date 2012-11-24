@@ -25,7 +25,7 @@
 					<h3 class="ui-title">Are you sure you'd like to leave group navigation?</h3>
 					<p>Your invited friends will be notifed that you are no longer navigating.</p>
 					<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Return</a>    
-					<a href="index.php" data-ajax="false" data-role="button" data-inline="true"  data-transition="flip" data-theme="b">Leave Group</a>  
+					<a id="indexLink" data-role="button" data-inline="true"  data-transition="flip" data-theme="b">Leave Group</a>  
 				</div>
 			</div>
 			
@@ -37,47 +37,61 @@
 					<h3 class="ui-title">Start early?</h3>
 					<p>You still have 15 minutes to leave. Do you want to start early?</p>
 					<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Cancel</a>    
-					<a href="navigation.php" data-ajax="false" data-role="button" data-inline="true"  data-transition="slide" data-theme="b">Start Navigation</a>  
+					<a href="navigation.php" data-role="button" data-inline="true"  data-transition="slide" data-theme="b">Start Navigation</a>  
 				</div>
 			</div>
 			
 			
 			
             <div data-role="content">
-				<a href="#startEarly" data-theme="b" data-rel="popup" data-position-to="window" data-role="button"  data-transition="flow">Start</a>
-				<h2>Leave in: 15 minutes</h2>
-				<ol data-role="listview" data-inset="true">
-					<li>
-						<h3>Andy Elder</h3>
-						<p class="ui-li-aside"><strong>15 Minutes Behind</strong></p>
-						<p><strong>Travelling to destination: 15 mi/30 min</strong></p>
-						<p>Andy is currently 15 Minutes	behind</p>
-					</li>
-					<li>
-						<h3><FONT COLOR="38C5FC">Kevin Ho (You)</FONT></h3>
-						<p><strong>Waiting. 7 mi/15 min</strong></p>
-						<p>Waiting for 15 minutes.</p>
-					</li>
-					<li>
-						<h3>Stephanie Harris</h3>
-						<p><strong>Waiting. 4 mi/8 min</strong></p>
-						<p>Waiting for 22 minutes.</p>
-					</li>
-					<li>
-						<h3>Jason Armstrong</h3>
-						<p><strong>Waiting. 2 mi/5 min</strong></p>
-						<p>Waiting for 25 minutes.</p>
-					</li>
+            	<h3 style="text-align: center;"><FONT COLOR="38C5FC"><span id="status">""</span></FONT></h3>
+				<a data-theme="b" id="start" data-position-to="window" data-role="button"  data-transition="flow">Start</a>
+				<div class="leaveIn"></div>
+				<ol class="overviewList" data-role="listview" data-inset="true">
 				</ol>
             </div>
 			<script type = "text/javascript">
-				$(document).bind('pageinit',function(event){		
-					$.post("getDest.php", {username: localStorage.getItem('username')}, function(data) {
-							destLat = data.lat;
-							destLng = data.lng;
-					}, "json");
-						
+				$(document).bind('pageinit',function(event){
+					$.post("update_nav.php", {username: localStorage.getItem('username'), status: 0});
+					
+					$('#start').click(function(event){
+						window.clearTimeout(t);
+	      				window.location.assign("navigation.php");
+	   				 });
+	   				 
+	   				 $('#indexLink').click(function(event){
+						window.clearTimeout(t);
+	      				window.location.assign("index.php");
+	   				 });
+				
+					$('#status').html(""+localStorage.getItem('dest'));
+					
 				});
+				
+				function updateLists(){
+					
+					$.post("getNavOverview.php", {username: localStorage.getItem('username')}, function(data) {
+						$('.overviewList').children().remove();
+						var minutes = data.leaveTime/60;
+						minutes = Math.round(minutes);
+						if(minutes == 0){
+							$('.leaveIn').html("<h2>Leave now</h2>");
+						}else{
+							$('.leaveIn').html("<h2>Leave in "+minutes+" minutes");
+						}
+						$('.overviewList').append(data.listData);
+						$('.overviewList').listview('refresh');
+					}, "json");	
+				}
+				
+				
+				function timedCount(){
+					updateLists();
+					t=setTimeout("timedCount()",1000);
+				}
+				
+				t=setTimeout("timedCount()",1000);
+				
 			</script>
         </div>
        

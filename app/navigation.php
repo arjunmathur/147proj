@@ -37,11 +37,11 @@
 
 				<section id="wrapper" style="width:100%; height:100%;">
 					<fieldset class="ui-grid-a">
-						<div class="ui-block-a"><button id="prev" data-icon= "arrow-l" data-mini="true" type="submit" data-theme="b">Prev</button></div>
-						<div class="ui-block-b"><button id="next" data-icon="arrow-r" data-iconpos="right" data-mini="true" type="submit" data-theme="b">Next</button></div>	   
+						<div id="prev" class="ui-block-a"><button data-icon= "arrow-l" data-mini="true" type="submit" data-theme="b">Prev</button></div>
+						<div id="next" class="ui-block-b"><button data-icon="arrow-r" data-iconpos="right" data-mini="true" type="submit" data-theme="b">Next</button></div>
+						<div id="finish" class="ui-block-b"><button data-icon="check" data-iconpos="right" data-mini="true" type="submit" data-theme="c">Finish</button></div>
 					</fieldset>
-					<p><span id="stepinstruction" align="center">Tap Next to Begin</span></p>
-					<p><span id="distdur" align="center">Distance / Duration</span></p>
+					<p><span id="stepinstruction" align="center">Tap Next to Begin.</span></p>
 					<article>
 					  <p><span id="status">Locating...</span></p>
 					  <div id="instructions"></div>
@@ -49,26 +49,33 @@
 					</article>
 					<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
   					<script type="text/javascript" src="https://raw.github.com/HPNeo/gmaps/master/gmaps.js"></script>
-  					<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 					<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 					
 					<script type="text/javascript">
-						var service; var map; var mapcanvas; var latlng; var myLat; var myLng; var bluedot; var custompin; var custompinshadow; var destLat; var destLng; var distMatrix; var destLatLng;
-		
+						var map; var mapcanvas; var latlng; var myLat; var myLng; var bluedot; var custompin; var custompinshadow; var destLat; var destLng; var matrixService; var destLatLng; var bounds;
+						
+						$('#finish').click(function(){
+							$.post("update_nav.php", {username: localStorage.getItem('username'), status: 2});
+						});
 						
 						$(window).bind( 'orientationchange', function(e){
 
 						    if ($.event.special.orientationchange.orientation() == "portrait") {
-						        mapcanvas.style.height = '355px'; //TODO: how to make 100%
+						        mapcanvas.style.height = '320px'; //TODO: how to make 100%
 						  		mapcanvas.style.width = '320px';
 						    } else {
 						        mapcanvas.style.height = '200px'; //TODO: how to make 100%
 						  		mapcanvas.style.width = '480px';
 						    }
 						});
-												
 						
-						$(document).bind('pageinit',function(event){
+						/* Commands to execute once (prevent recall after link from Group Status) */
+						$("#prev").hide();
+						$("#finish").hide();
+						$.post("update_nav.php", {username: localStorage.getItem('username'), status: 1});
+						
+						$(document).bind('pagecreate',function(event){	
+							matrixService = new google.maps.DistanceMatrixService();
 							navigator.geolocation.getCurrentPosition(success, error);
 												
 				            $.post("getDest.php", {username: localStorage.getItem('username')}, function(data) {
@@ -79,10 +86,10 @@
 						});
 						
 						
+						
 						function getDistTime(){
 							
 							var checkLatLng = new google.maps.LatLng(myLat, myLng);
-							var matrixService = new google.maps.DistanceMatrixService();
 							
 							matrixService.getDistanceMatrix(
 							  {
@@ -102,9 +109,13 @@
 						  	
 						  	var results = response.rows[0].elements;
 						    var element = results[0];
-				            var distance = element.distance.text;
-						    var duration = element.duration.text;
-						    $('#distdur').html(""+distance+" / "+duration);
+				            var destDistance = element.distance.text;
+						    var destDuration = element.duration.text;
+						    var destDistanceValue = element.distance.value;
+						    var destDurationValue = element.duration.value;
+						    $('#distdur').html(""+destDistance+" / "+destDuration);
+						    
+						    //$.post("submitDistance.php", {username: localStorage.getItem('username'), time: destDuration, distance: destDistance, time_value: destDurationValue, dist_value: destDistanceValue}); 	
 						    
 						  }
 						  else{
@@ -161,98 +172,119 @@
        					   lat: myLat,
       					   lng: myLng
      					  });
-     					  service = new google.maps.places.PlacesService(map.map);
- 
-	     					  custompin = new google.maps.MarkerImage(
-	  							'custompin.png',
-	  							 new google.maps.Size(20,34),
-	  							 new google.maps.Point(0,0),
-	 							 new google.maps.Point(10,34)
-								);
-	
-							   custompinshadow = new google.maps.MarkerImage(
-	 							 'custompinshadow.png',
-	  							  new google.maps.Size(40,34),
-	 							  new google.maps.Point(0,0),
-	 							  new google.maps.Point(10,34)
-							  );
-	     					  
-	     					  bluedot = new google.maps.MarkerImage(
-								'bluedot.png',
-								null, // size
-								null, // origin
-								new google.maps.Point( 8, 8 ), // anchor (move to center of marker)
-								new google.maps.Size( 17, 17 ) // scaled size (required for Retina display icon)
-								);
-								
-						google.maps.event.addListener(map.map, 'idle', function() {
-							
-							google.maps.event.clearListeners(map.map, 'idle');
-							
-								
-							map.drawRoute({
-								origin:[myLat, myLng],
-								destination:[destLat, destLng],
-								travelMode: 'driving',
-								strokeColor: '#00AAFF',
-								strokeOpacity: 0.6,
-								strokeWeight: 8
-							});
-							
-							var bounds = new google.maps.LatLngBounds();
-							mylatlng = new google.maps.LatLng(myLat, myLng);
-							destlatlng = new google.maps.LatLng(destLat, destLng);
-							bounds.extend(mylatlng);
-							bounds.extend(destlatlng);
-							map.fitBounds(bounds);
-									
-							map.getRoutes({
-					          origin: [myLat, myLng],
-					          destination: [destLat, destLng], 
-					          travelMode: 'driving',
-					          callback: function(e){
-					            route = new GMaps.Route({
-					              map: map,
-					              route: e[0],
-					              strokeColor: '#1A235E',
-					              strokeOpacity: 0.6,
-					              strokeWeight: 8
-					            });
-					          }
-					        });
-					        
-							var watchId = navigator.geolocation.watchPosition(updateLocation);
-									
-							
-							
-							$('#next').click(function(e){
-								
-							  map.setZoom(16);
-								
-					          e.preventDefault();
-					          route.forward();
-					         
-					          if(route.step_count < route.steps_length){
-					          	$("#stepinstruction").html(""+route.steps[route.step_count].instructions);    	
-					         	 map.map.setCenter(new google.maps.LatLng( route.steps[route.step_count-1].end_location.lat(),  route.steps[route.step_count-1].end_location.lng()));
-					          } else {
-					          	
-					          	map.map.setCenter(new google.maps.LatLng(destLat,destLng));
-					          }
-					          
-					        });
-					        
-					        $('#prev').click(function(e){
-					          e.preventDefault();
-					          route.back();
-					
-					          if(route.step_count >= 0){
-					          	$("#stepinstruction").html(""+route.steps[route.step_count-1].instructions);
-					          	map.map.setCenter(new google.maps.LatLng( route.steps[route.step_count-1].end_location.lat(),  route.steps[route.step_count-1].end_location.lng()));
-					          }
-					        });
+     					  
+     					  
+ 							 setTimeout(function(){
+ 							 	map.setZoom(map.zoom-2);
+ 							 	map.setZoom(map.zoom-2);
+				                navSteps();
+				             },1000);
+				             
+						}
 				        
-				        });
+						
+						
+						
+				         function navSteps(){    
+				         	
+				              
+								  custompin = new google.maps.MarkerImage(
+									'custompin.png',
+									 new google.maps.Size(20,34),
+									 new google.maps.Point(0,0),
+									 new google.maps.Point(10,34)
+									);
+		
+								   custompinshadow = new google.maps.MarkerImage(
+									 'custompinshadow.png',
+									  new google.maps.Size(40,34),
+									  new google.maps.Point(0,0),
+									  new google.maps.Point(10,34)
+								  );
+								  
+								  bluedot = new google.maps.MarkerImage(
+									'bluedot.png',
+									null, // size
+									null, // origin
+									new google.maps.Point( 8, 8 ), // anchor (move to center of marker)
+									new google.maps.Size( 17, 17 ) // scaled size (required for Retina display icon)
+									);
+									
+									
+									
+							google.maps.event.addListener(map.map, 'idle', function() {
+								
+								google.maps.event.clearListeners(map.map, 'idle');
+								
+									
+								map.drawRoute({
+									origin:[myLat, myLng],
+									destination:[destLat, destLng],
+									travelMode: 'driving',
+									strokeColor: '#00AAFF',
+									strokeOpacity: 0.6,
+									strokeWeight: 8
+								});
+								
+								bounds = new google.maps.LatLngBounds();
+								mylatlng = new google.maps.LatLng(myLat, myLng);
+								destlatlng = new google.maps.LatLng(destLat, destLng);
+								bounds.extend(mylatlng);
+								bounds.extend(destlatlng);
+								map.fitBounds(bounds);
+										
+								map.getRoutes({
+								  origin: [myLat, myLng],
+								  destination: [destLat, destLng], 
+								  travelMode: 'driving',
+								  callback: function(e){
+									route = new GMaps.Route({
+									  map: map,
+									  route: e[0],
+									  strokeColor: '#1A235E',
+									  strokeOpacity: 0.6,
+									  strokeWeight: 8
+									});
+								  }
+								});
+								
+								var watchId = navigator.geolocation.watchPosition(updateLocation);
+										
+
+								
+								$('#next').click(function(e){
+									
+								  e.preventDefault();
+								  map.setZoom(16);
+								  $('#prev').show();
+								  route.forward();
+								 
+								  if(route.step_count < route.steps_length){
+									$("#stepinstruction").html(""+route.steps[route.step_count].instructions);    	
+									 map.setCenter(route.steps[route.step_count].start_location.lat(),  route.steps[route.step_count].start_location.lng());
+								  }else{
+									$('#next').hide();
+									$('#finish').show();
+								  }
+								});
+								
+								$('#prev').click(function(e){
+								  e.preventDefault();
+								  route.back();
+									$('#finish').hide();
+									$('#next').show();	
+								  if(route.step_count > 0){
+									$("#stepinstruction").html(""+route.steps[route.step_count].instructions);
+									map.setCenter(route.steps[route.step_count].start_location.lat(),  route.steps[route.step_count].start_location.lng());
+								  }
+								  else{
+									$('#prev').hide();
+									$("#stepinstruction").html("Tap Next to begin.");
+									map.fitBounds(bounds);
+								  }
+								});
+							
+							});
 				      
 								
 							

@@ -31,7 +31,7 @@ $result1 = mysql_query($userQuery);
 		 
 $participantsQuery = sprintf("INSERT INTO trip_participants " .
 		 " (trip_id, username, STATUS, TRAVEL_STATUS, time_to_dest, dist_to_dest) " .
-		 " VALUES ('%s', '%s', '%s', NULL, NULL, NULL);",
+		 " VALUES ('%s', '%s', '%s', 0, NULL, NULL);",
 		 mysql_real_escape_string($trip_id),
 		 mysql_real_escape_string($user),
 		 mysql_real_escape_string($status));
