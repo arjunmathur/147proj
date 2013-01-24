@@ -1,3 +1,5 @@
 GrouPS Social Navigation App
 =============================
-Authors: Andy Elder, Arjun Mathur.
+Authors:Arjun Mathur | Andy Elder
+
+www.groupsnav.com
